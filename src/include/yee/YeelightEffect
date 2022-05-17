@@ -1,0 +1,14 @@
+#pragma once
+
+#include <cc/String>
+
+namespace cc::yee {
+
+enum class YeelightEffect: int {
+    Sudden = 0,
+    Smooth = 1
+};
+
+String yeeStr(YeelightEffect effect);
+
+} // namespace cc::yee

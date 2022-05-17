@@ -1,0 +1,35 @@
+#pragma once
+
+#include <yee/YeelightCommand>
+#include <yee/YeelightEffect>
+
+namespace cc::yee {
+
+class YeelightSetColorTemp final: public YeelightCommand
+{
+public:
+    YeelightSetColorTemp() = default;
+
+    YeelightSetColorTemp(int colorTemp, YeelightEffect effect = YeelightEffect::Sudden, int duration = 0):
+        YeelightCommand{new State{colorTemp, effect, duration}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(int colorTemp, YeelightEffect effect, int duration):
+            YeelightCommand::State{"set_ct_abx"},
+            colorTemp_{colorTemp},
+            effect_{effect},
+            duration_{duration}
+        {}
+
+        String toString() const override;
+
+        int colorTemp_;
+        YeelightEffect effect_;
+        int duration_;
+    };
+};
+
+} // namespace cc::yee

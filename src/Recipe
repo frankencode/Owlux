@@ -1,0 +1,11 @@
+Library {
+    name: Yeelight
+    use: [
+        CoreComponents/Core,
+        CoreComponents/Glob,
+        CoreComponents/Network,
+        CoreComponents/Meta,
+        CoreComponents/Crypto
+    ]
+    source: [ *.cc, setup/*.cc ]
+}

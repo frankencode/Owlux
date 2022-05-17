@@ -1,0 +1,30 @@
+#pragma once
+
+#include <yee/YeelightCommand>
+
+namespace cc::yee {
+
+class YeelightEstablishAutoDelayOff final: public YeelightCommand
+{
+public:
+    explicit YeelightEstablishAutoDelayOff(int delay, int brightness = 100):
+        YeelightCommand{new State{delay, brightness}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(int delay, int brightness):
+            YeelightCommand::State{"set_scene"},
+            delay_{delay},
+            brightness_{brightness}
+        {}
+
+        String toString() const override;
+
+        int delay_;
+        int brightness_;
+    };
+};
+
+} // namespace cc::yee

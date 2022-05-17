@@ -1,0 +1,304 @@
+## Scanning for available wireless networks
+
+### Prerequisites (Arch)
+
+---
+plkfile iwlist
+pacman -S wireless_tools
+---
+
+###
+
+---
+sudo iwlist wlp2s0 scan
+---
+
+---
+Cell 03 - Address: 64:90:C1:97:91:E0
+    Channel:1
+    Frequency:2.412 GHz (Channel 1)
+    Quality=64/70  Signal level=-46 dBm
+    Encryption key:off
+    ESSID:"YLBulbColor1s-91DF-9791DF"
+    Bit Rates:5.5 Mb/s; 11 Mb/s; 1 Mb/s; 2 Mb/s; 6 Mb/s
+              12 Mb/s; 24 Mb/s; 48 Mb/s
+    Bit Rates:54 Mb/s; 9 Mb/s; 18 Mb/s; 36 Mb/s
+    Mode:Master
+    Extra:tsf=00000000059e174d
+    Extra: Last beacon: 2454ms ago
+    IE: Unknown: 0019594C42756C62436F6C6F7231732D393144462D393739314446
+    IE: Unknown: 01088B9682840C183060
+    IE: Unknown: 32046C122448
+    IE: Unknown: 030101
+    IE: Unknown: 0706434E00010D14
+    IE: Unknown: 2D1A6E1100FF00000000000000000000000100000000000000000000
+    IE: Unknown: 3D1601050000000000000000000000000000000000000000
+    IE: Unknown: DD180050F2020101040003A4000027A4000042435E0062322F00
+    IE: Unknown: DD5200A04000000340024C0112594C42756C62436F6C6F7231732D393
+---
+
+## Resetting the bulb
+
+---
+Use the light switch to turn the light bulb on and off five times (on for two seconds, off for two seconds). For the light bulb 1S (dimmable), it will be in breathing mode. After 5 seconds, it will automatically reset itself. For the light bulb 1S (color), it will display a circling multi-colored effect, then automatically reset itself and display a white light after five seconds. This indicates that the light bulb has been restored to its factory settings.
+---
+
+## A factory new light (mono)
+
+---
+          Cell 09 - Address: 66:90:C1:9F:FA:50
+                    Channel:1
+                    Frequency:2.412 GHz (Channel 1)
+                    Quality=59/70  Signal level=-51 dBm
+                    Encryption key:off
+...skipping...
+                    ESSID:"yeelink-light-mono5_mibtFA50"
+                    Bit Rates:5.5 Mb/s; 11 Mb/s; 1 Mb/s; 2 Mb/s; 6 Mb/s
+                              12 Mb/s; 24 Mb/s; 48 Mb/s
+                    Bit Rates:54 Mb/s; 9 Mb/s; 18 Mb/s; 36 Mb/s
+                    Mode:Master
+                    Extra:tsf=00000000059a8c4e
+                    Extra: Last beacon: 11414ms ago
+                    IE: Unknown: 001C7965656C696E6B2D6C696768742D6D6F6E6F355F6D69627446413530
+                    IE: Unknown: 01088B9682840C183060
+                    IE: Unknown: 32046C122448
+                    IE: Unknown: 030101
+                    IE: Unknown: 0706434E00010D14
+                    IE: Unknown: 2D1A6E1100FF00000000000000000000000100000000000000000000
+                    IE: Unknown: 3D1601050000000000000000000000000000000000000000
+                    IE: Unknown: DD180050F2020101040003A4000027A4000042435E0062322F00
+                    IE: Unknown: DD5300A04000000340024C0113594C46696C616D656E7442756C622D4641353002135965656C6967687420546563686E6F6C6F67790308594C44503158594C040300A04007069A7AC5CF0A2D080105090439D72E11
+---
+
+after first reset: nothing
+
+after second reset:
+
+---
+          Cell 08 - Address: 66:90:C1:9F:FA:50
+                    Channel:1
+                    Frequency:2.412 GHz (Channel 1)
+                    Quality=65/70  Signal level=-45 dBm
+                    Encryption key:off
+                    ESSID:"yeelink-light-mono5_mibtFA50"
+                    Bit Rates:5.5 Mb/s; 11 Mb/s; 1 Mb/s; 2 Mb/s; 6 Mb/s
+                              12 Mb/s; 24 Mb/s; 48 Mb/s
+                    Bit Rates:54 Mb/s; 9 Mb/s; 18 Mb/s; 36 Mb/s
+                    Mode:Master
+                    Extra:tsf=000000000370a975
+                    Extra: Last beacon: 3284ms ago
+                    IE: Unknown: 001C7965656C696E6B2D6C696768742D6D6F6E6F355F6D69627446413530
+                    IE: Unknown: 01088B9682840C183060
+                    IE: Unknown: 32046C122448
+                    IE: Unknown: 030101
+                    IE: Unknown: 0706434E00010D14
+                    IE: Unknown: 2D1A6E1100FF00000000000000000000000100000000000000000000
+                    IE: Unknown: 3D1601050000000000000000000000000000000000000000
+                    IE: Unknown: DD180050F2020101040003A4000027A4000042435E0062322F00
+                    IE: Unknown: DD5300A04000000340024C0113594C46696C616D656E7442756C622D4641353002135965656C6967687420546563686E6F6C6F67790308594C44503158594C040300A0400706CFBE4BCF72D508010509044702C417
+---
+
+#################################################################################
+### Legacy color Yeelight
+
+
+First power-on:
+---
+          Cell 02 - Address: 7C:49:EB:15:04:91
+                    Channel:6
+                    Frequency:2.437 GHz (Channel 6)
+                    Quality=42/70  Signal level=-68 dBm
+                    Encryption key:off
+                    ESSID:"yeelink-light-color1_miap0491"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 6 Mb/s
+                              9 Mb/s; 12 Mb/s; 18 Mb/s
+                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf=0000000000c449ac
+                    Extra: Last beacon: 20227ms ago
+                    IE: Unknown: 001D7965656C696E6B2D6C696768742D636F6C6F72315F6D69617030343931
+                    IE: Unknown: 010882848B960C121824
+                    IE: Unknown: 030106
+                    IE: Unknown: 2A0100
+                    IE: Unknown: 32043048606C
+                    IE: Unknown: DD180050F2020101800003A4000027A4000042435E0062322F00
+---
+
+First ping:
+---
+[fme@brix yeelight_debug]$ ./yeelight -ping
+main.cc:147: wifi.name() = wlp2s0
+main.cc:154: peerAddress = 192.168.13.1:54321
+main.cc:157: socket.getLocalAddress() = 192.168.13.2:50160
+00000000  21 31 00 20 FF FF FF FF  FF FF FF FF FF FF FF FF  |!1. ............|
+00000010  FF FF FF FF FF FF FF FF  FF FF FF FF FF FF FF FF  |................|
+00000000  21 31 00 20 00 00 00 00  05 31 63 7E 00 00 00 80  |!1. .....1c~....|
+00000010  C5 F0 87 8A 95 C5 36 FB  DF BC 69 C4 C5 02 58 BE  |......6...i...X.|
+main.cc:175: hex(status.deviceId()) = 531637E
+00000000  C5 F0 87 8A 95 C5 36 FB  DF BC 69 C4 C5 02 58 BE  |......6...i...X.|
+Device ID: 87122814
+Uptime: 128s
+Token: 0xc5f0878a95c536fbdfbc69c4c50258be
+---
+
+First setup:
+---
+[fme@brix yeelight_debug]$ ./yeelight -setup
+main.cc:147: wifi.name() = wlp2s0
+main.cc:154: peerAddress = 192.168.13.1:54321
+main.cc:157: socket.getLocalAddress() = 192.168.13.2:41664
+00000000  21 31 00 20 FF FF FF FF  FF FF FF FF FF FF FF FF  |!1. ............|
+00000010  FF FF FF FF FF FF FF FF  FF FF FF FF FF FF FF FF  |................|
+00000000  21 31 00 20 00 00 00 00  05 31 63 7E 00 00 00 AE  |!1. .....1c~....|
+00000010  C5 F0 87 8A 95 C5 36 FB  DF BC 69 C4 C5 02 58 BE  |......6...i...X.|
+main.cc:175: hex(status.deviceId()) = 531637E
+00000000  C5 F0 87 8A 95 C5 36 FB  DF BC 69 C4 C5 02 58 BE  |......6...i...X.|
+main.cc:188: hex(token) = c5f0878a95c536fbdfbc69c4c50258be
+WiFi name (SSID): cybslan
+00000000  21 31 00 A0 00 00 00 00  05 31 63 7E 00 00 00 AE  |!1.......1c~....|
+00000010  92 66 87 43 D1 E6 97 4B  88 82 49 17 B5 E7 08 5B  |.f.C...K..I....[|
+00000020  DD 60 A9 2D 5F 0C 94 1E  9E 52 39 4E 71 85 1F CB  |.`.-_....R9Nq...|
+00000030  4C 73 05 18 58 2C E4 0B  4F 25 84 37 86 43 76 21  |Ls..X,..O%.7.Cv!|
+00000040  39 4C 56 39 FF 2D 7E 66  E1 8F 4B FD 75 CE 6F E9  |9LV9.-~f..K.u.o.|
+00000050  D3 C2 3E 92 4D F0 FB BE  54 65 3E 99 DD 22 B7 D3  |..>.M...Te>.."..|
+00000060  76 99 CF 27 6D 31 2F 0D  A0 8C 2C A6 D4 D4 B7 7C  |v..'m1/...,....||
+00000070  2D DD 59 31 B6 27 D7 D6  FB 36 4A C8 26 E3 BC 94  |-.Y1.'...6J.&...|
+00000080  9A E3 4F A7 98 62 0A 8F  19 86 FB C5 0E 4E F0 31  |..O..b.......N.1|
+00000090  E4 CD 89 A7 5F 08 D5 BD  22 CA BA F6 C2 AC F2 05  |...._...".......|
+00000000  21 31 00 50 00 00 00 00  05 31 63 7E 00 00 00 B8  |!1.P.....1c~....|
+00000010  F5 99 BF E6 E1 68 D4 52  63 14 26 49 FC 29 C3 71  |.....h.Rc.&I.).q|
+00000020  9F EF 57 A0 C0 9A B4 4D  9D 6C 4F A5 30 80 DF 85  |..W....M.lO.0...|
+00000030  FD 9B E6 E6 A3 69 13 E6  2E 05 40 6E A9 8E 68 AA  |.....i....@n..h.|
+00000040  18 00 FB 0D A4 FA 98 F5  79 86 60 B4 EA 8F 29 FE  |........y.`...).|
+main.cc:210: result = {
+  "id": 1637785186,
+  "result": [ "ok" ]
+}
+---
+
+Afterwards: Not visible in scan!!
+
+Ping after first power-reset:
+---
+[fme@brix yeelight_debug]$ ./yeelight -ping 192.168.73.102
+main.cc:154: peerAddress = 192.168.73.102:54321
+main.cc:157: socket.getLocalAddress() = 0.0.0.0:43752
+00000000  21 31 00 20 FF FF FF FF  FF FF FF FF FF FF FF FF  |!1. ............|
+00000010  FF FF FF FF FF FF FF FF  FF FF FF FF FF FF FF FF  |................|
+00000000  21 31 00 20 00 00 00 00  05 31 63 7E 00 00 00 49  |!1. .....1c~...I|
+00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+main.cc:175: hex(status.deviceId()) = 531637E
+00000000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+Device ID: 87122814
+Uptime: 73s
+Token: 0x00000000000000000000000000000000
+---
+
+# Sniffing on the wifi
+
+See: https://www.nayab.xyz/networking/capture-wireless-packets-monitor-mode-linux
+---
+iw list
+
+iw phy phy0 interface add mon0 type monitor
+ip link set mon0 down
+ip link set mon0 up
+sleep 1
+iw dev wlp2s0 del
+iw dev mon0 set freq 2437
+iw dev
+wireshark
+---
+
+Bring back into manage mode
+---
+iw dev mon0 del
+iw phy phy0 interface add wlp2s0 type managed
+---
+
+## Yeelight legacy after firmware update
+
+---
+[fme@brix yeelight_debug]$ ./yeelight -list
+        192.168.73.102  87122814        0x636f6c6f72    76.0.0  YeelightColorMode::RedGreenBlue #FF0000
+[fme@brix yeelight_debug]$ ./yeelight -ping 192.168.73.102
+main.cc:154: peerAddress = 192.168.73.102:54321
+main.cc:157: socket.getLocalAddress() = 0.0.0.0:59355
+00000000  21 31 00 20 FF FF FF FF  FF FF FF FF FF FF FF FF  |!1. ............|
+00000010  FF FF FF FF FF FF FF FF  FF FF FF FF FF FF FF FF  |................|
+00000000  21 31 00 20 00 00 00 00  05 31 63 7E 00 00 04 46  |!1. .....1c~...F|
+00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+main.cc:175: hex(status.deviceId()) = 531637E
+00000000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+Device ID: 87122814
+Uptime: 1094s
+Token: 0x00000000000000000000000000000000
+---
+
+## Yeelight legacy after firmware update and first reset
+
+---
+          Cell 07 - Address: 7C:49:EB:15:04:91
+                    Channel:6
+                    Frequency:2.437 GHz (Channel 6)
+                    Quality=61/70  Signal level=-49 dBm
+                    Encryption key:off
+                    ESSID:"yeelink-light-color1_miap0491"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 6 Mb/s
+                              9 Mb/s; 12 Mb/s; 18 Mb/s
+                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf=0000000006701017
+                    Extra: Last beacon: 1427ms ago
+                    IE: Unknown: 001D7965656C696E6B2D6C696768742D636F6C6F72315F6D69617030343931
+                    IE: Unknown: 010882848B960C121824
+                    IE: Unknown: 030106
+                    IE: Unknown: 2A0100
+                    IE: Unknown: 32043048606C
+                    IE: Unknown: DD180050F2020101800003A4000027A4000042435E0062322F00
+---
+
+after connection
+
+---
+3: wlp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 28:7f:cf:bd:8c:4c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.13.3/24 brd 192.168.13.255 scope global dynamic noprefixroute wlp2s0
+       valid_lft 3597sec preferred_lft 3597sec
+    inet6 fe80::c582:9a0a:44dd:e12c/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+
+[fme@brix yeelight_debug]$ ./yeelight -setup
+main.cc:147: wifi.name() = wlp2s0
+main.cc:154: peerAddress = 192.168.13.1:54321
+main.cc:157: socket.getLocalAddress() = 192.168.13.3:53963
+00000000  21 31 00 20 FF FF FF FF  FF FF FF FF FF FF FF FF  |!1. ............|
+00000010  FF FF FF FF FF FF FF FF  FF FF FF FF FF FF FF FF  |................|
+00000000  21 31 00 20 00 00 00 00  05 31 63 7E 00 00 00 DD  |!1. .....1c~....|
+00000010  F8 C1 C0 09 FE E2 2B 3A  E5 A5 77 2E 1B 1D 27 74  |......+:..w...'t|
+main.cc:175: hex(status.deviceId()) = 531637E
+00000000  F8 C1 C0 09 FE E2 2B 3A  E5 A5 77 2E 1B 1D 27 74  |......+:..w...'t|
+main.cc:188: hex(token) = f8c1c009fee22b3ae5a5772e1b1d2774
+WiFi name (SSID): cybslan
+00000000  21 31 00 A0 00 00 00 00  05 31 63 7E 00 00 00 DD  |!1.......1c~....|
+00000010  43 D5 58 32 D0 4F ED 6E  70 7A 4A 92 91 F2 94 9C  |C.X2.O.npzJ.....|
+00000020  34 04 7C 9E 3E DD 52 42  A0 11 C9 28 01 EE 96 D2  |4.|.>.RB...(....|
+00000030  F7 FD 11 BD 11 68 68 99  6B 6F C9 D0 6D ED DF E7  |.....hh.ko..m...|
+00000040  05 16 3B 6D D4 8D D6 E9  52 92 06 80 5B EF DD 2D  |..;m....R...[..-|
+00000050  B4 D3 48 46 09 6E D3 43  01 1D BA 34 53 6F 61 74  |..HF.n.C...4Soat|
+00000060  E8 DB 95 14 27 18 D0 B8  DF 73 2B CB 53 8C 0D 56  |....'....s+.S..V|
+00000070  C0 9F DA 4E 33 BF E4 FF  03 6B E3 79 13 E6 2B 10  |...N3....k.y..+.|
+00000080  41 0A 89 A3 0F AB D3 68  9D 69 58 F1 87 5B 39 81  |A......h.iX..[9.|
+00000090  E7 1E FA B4 8A BF 89 B1  B6 9C 2D 1D 51 88 20 62  |..........-.Q. b|
+00000000  21 31 00 50 00 00 00 00  05 31 63 7E 00 00 00 EE  |!1.P.....1c~....|
+00000010  12 9F 8D E2 07 5D 9E 53  3F A0 FF AE A1 E2 77 2D  |.....].S?.....w-|
+00000020  32 81 48 45 41 FB C3 C3  E1 8A 40 86 7F FB F6 2E  |2.HEA.....@.....|
+00000030  0A FD C6 07 8F C3 87 8C  E3 6E 36 88 68 4C 14 B6  |.........n6.hL..|
+00000040  64 79 B6 2E 34 AE 53 30  27 A7 FB E7 C5 B2 55 52  |dy..4.S0'.....UR|
+main.cc:210: result = {
+  "id": 1637801502,
+  "result": [ "ok" ]
+}
+---
+
+Observation: The light is not rebooting/reconnecting automatically!

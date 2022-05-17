@@ -1,0 +1,30 @@
+#pragma once
+
+#include <yee/YeelightStatus>
+#include <cc/Channel>
+#include <cc/Object>
+
+namespace cc::yee {
+
+class YeelightDiscovery final: public Object
+{
+public:
+    explicit YeelightDiscovery(long refreshInterval = -1, int maxRetry = -1);
+
+    void refresh();
+
+    void wait();
+    void shutdown();
+
+    Channel<YeelightStatus> &discovery();
+
+    auto begin() { return discovery().begin(); }
+    auto end() { return discovery().end(); }
+
+private:
+    struct State;
+
+    State &me();
+};
+
+} // namespace cc::yee

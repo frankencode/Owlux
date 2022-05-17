@@ -1,0 +1,10 @@
+Application {
+    name: beelight
+    use: [
+        CoreComponents/Core,
+        CoreComponents/Network,
+        CoreComponents/Glob,
+        CoreComponents/UX,
+        Yeelight
+    ]
+}

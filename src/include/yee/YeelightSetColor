@@ -1,0 +1,36 @@
+#pragma once
+
+#include <yee/YeelightCommand>
+#include <yee/YeelightEffect>
+#include <cc/Color>
+
+namespace cc::yee {
+
+class YeelightSetColor final: public YeelightCommand
+{
+public:
+    YeelightSetColor() = default;
+
+    explicit YeelightSetColor(const Color &color, YeelightEffect effect = YeelightEffect::Sudden, int duration = 0):
+        YeelightCommand{new State{color, effect, duration}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(const Color &color, YeelightEffect effect, int duration):
+            YeelightCommand::State{"set_rgb"},
+            color_{color},
+            effect_{effect},
+            duration_{duration}
+        {}
+
+        String toString() const override;
+
+        Color color_;
+        YeelightEffect effect_;
+        int duration_;
+    };
+};
+
+} // namespace cc::yee

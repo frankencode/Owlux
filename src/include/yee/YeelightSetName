@@ -1,0 +1,30 @@
+#pragma once
+
+#include <yee/YeelightCommand>
+
+namespace cc::yee {
+
+class YeelightSetName final: public YeelightCommand
+{
+public:
+    YeelightSetName() = default;
+
+    explicit YeelightSetName(const String &name):
+        YeelightCommand{new State{name}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(const String &name):
+            YeelightCommand::State{"set_name"},
+            name_{name}
+        {}
+
+        String toString() const override;
+
+        String name_;
+    };
+};
+
+} // namespace cc::yee

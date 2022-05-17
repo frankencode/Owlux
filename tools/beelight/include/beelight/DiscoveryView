@@ -1,0 +1,24 @@
+#pragma once
+
+#include <cc/View>
+
+namespace cc::yee {
+
+using namespace cc;
+
+class DiscoveryView final: public View
+{
+public:
+    /** Create a primordial discovery view
+      */
+    DiscoveryView();
+
+    /** Get a weak reference in \a self
+      */
+    DiscoveryView &associate(Out<DiscoveryView> self);
+
+private:
+    struct State;
+};
+
+} // namespace cc::yee

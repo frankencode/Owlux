@@ -1,0 +1,8 @@
+Tests {
+    use: [
+        CoreComponents/Core,
+        CoreComponents/Crypto,
+        CoreComponents/Testing,
+        Yeelight
+    ]
+}

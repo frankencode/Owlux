@@ -1,0 +1,23 @@
+#pragma once
+
+#include <cc/String>
+
+namespace cc::yee {
+
+enum class YeelightColorMode: int {
+    Undef        = -1,
+    Default      = 0,
+    ColorTemp    = 1,
+    RedGreenBlue = 2,
+    HueSat       = 3,
+    ColorFlow    = 4,
+    NightLight   = 5,
+    Min          = ColorTemp,
+    Max          = NightLight
+};
+
+String str(YeelightColorMode mode);
+
+inline int operator+(YeelightColorMode mode) { return static_cast<int>(mode); }
+
+} // namespace cc::yee

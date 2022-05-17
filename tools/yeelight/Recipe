@@ -1,0 +1,9 @@
+Application {
+    use: [
+        CoreComponents/Core,
+        CoreComponents/Network,
+        CoreComponents/Glob,
+        Yeelight
+    ]
+    depends: readline
+}

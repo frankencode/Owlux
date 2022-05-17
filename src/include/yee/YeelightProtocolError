@@ -1,0 +1,21 @@
+#pragma once
+
+#include <cc/exceptions>
+
+namespace cc::yee {
+
+class YeelightProtocolError: public DebugError
+{
+public:
+    YeelightProtocolError(const String &reason, const char *source, int line):
+        DebugError{reason, source, line}
+    {}
+};
+
+#define YEELIGHT_PROTOCOL_ERROR(reason) \
+    throw YeelightProtocolError(reason, __FILE__, __LINE__)
+
+#define YEELIGHT_EXPECT(condition) \
+    if (!(condition)) YEELIGHT_PROTOCOL_ERROR(#condition);
+
+} // namespace cc::yee

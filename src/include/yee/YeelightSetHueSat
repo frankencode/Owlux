@@ -1,0 +1,35 @@
+#pragma once
+
+#include <yee/YeelightCommand>
+#include <yee/YeelightEffect>
+
+namespace cc::yee {
+
+class YeelightSetHueSat: public YeelightCommand
+{
+public:
+    YeelightSetHueSat(int hue, int sat, YeelightEffect effect = YeelightEffect::Sudden, int duration = 0):
+        YeelightCommand{new State{hue, sat, effect, duration}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(int hue, int sat, YeelightEffect effect, int duration):
+            YeelightCommand::State{"set_hsv"},
+            hue_{hue},
+            sat_{sat},
+            effect_{effect},
+            duration_{duration}
+        {}
+
+        String toString() const override;
+
+        int hue_;
+        int sat_;
+        YeelightEffect effect_;
+        int duration_;
+    };
+};
+
+} // namespace cc::yee

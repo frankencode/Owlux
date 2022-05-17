@@ -1,0 +1,44 @@
+#pragma once
+
+#include <cc/Variant>
+#include <cc/Object>
+
+namespace cc::yee {
+
+class YeelightCommand: public Object
+{
+public:
+    YeelightCommand() = default;
+
+    int id() const { return me().id_; }
+
+    String method() const { return me().method_; }
+
+    String toString() const { return me().toString(); }
+
+protected:
+    friend class YeelightControl;
+
+    struct State: public Object::State
+    {
+        State(const String &method):
+            method_{method}
+        {}
+
+        virtual String toString() const = 0;
+
+        int id_ { -1 };
+        String method_;
+    };
+
+    YeelightCommand(State *newState):
+        Object{newState}
+    {}
+
+    State *operator->() { return &me(); }
+
+    State &me() { return Object::me.as<State>(); }
+    const State &me() const { return Object::me.as<State>(); }
+};
+
+} // namespace cc::yee

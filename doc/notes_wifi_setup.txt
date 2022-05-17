@@ -1,0 +1,20 @@
+hex(base64Decode(String{"FfxLSnBiza9x7YQb"})) = 15fc4b4a7062cdaf71ed841b
+
+15 fc 4b 4a 70 62 cd af 71 ed 84 1b
+
+onlinedisassembler.com:
+
+armv4:
+
+0x0000000000000000:  15 FC 4B 4A    bmi   #0x12ff05c
+
+  branch if mi (negative)
+
+
+0x0000000000000004:  70 62 CD AF    svcge #0xcd6270
+
+  cause an exception, switch to supervisor mode, continue at #0xcd6270
+
+0x0000000000000008:  71 ED 84 1B    blne  #0xfe13b5d4
+
+  branch and copy address into link register

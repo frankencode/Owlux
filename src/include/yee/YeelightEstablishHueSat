@@ -1,0 +1,32 @@
+#pragma once
+
+#include <yee/YeelightCommand>
+
+namespace cc::yee {
+
+class YeelightEstablishHueSat final: public YeelightCommand
+{
+public:
+    explicit YeelightEstablishHueSat(int hue, int sat = 100, int brightness = 100):
+        YeelightCommand{new State{hue, sat, brightness}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(int hue, int sat, int brightness):
+            YeelightCommand::State{"set_scene"},
+            hue_{hue},
+            sat_{sat},
+            brightness_{brightness}
+        {}
+
+        String toString() const override;
+
+        int hue_;
+        int sat_;
+        int brightness_;
+    };
+};
+
+} // namespace cc::yee
