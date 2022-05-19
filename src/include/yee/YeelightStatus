@@ -21,6 +21,8 @@ public:
     long id() const;
     String name() const;
 
+    String displayName() const;
+
     String model() const;
     const Set<String> &supportedMethods() const;
     Version firmwareVersion() const;

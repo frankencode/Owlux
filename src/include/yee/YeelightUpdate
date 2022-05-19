@@ -13,9 +13,9 @@ namespace cc::yee {
 class YeelightUpdate final: public YeelightResponse
 {
 public:
-    YeelightUpdate() = default;
-
     static bool recognise(const MetaObject &message);
+
+    YeelightUpdate() = default;
 
     explicit YeelightUpdate(const MetaObject &message);
     explicit YeelightUpdate(const YeelightResponse &response);

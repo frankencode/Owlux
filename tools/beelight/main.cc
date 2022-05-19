@@ -1,5 +1,7 @@
 #include <beelight/DiscoveryView>
+#include <beelight/ColorController>
 #include <cc/StackView>
+#include <cc/DEBUG>
 
 int main()
 {
@@ -14,6 +16,15 @@ int main()
         .push(
             DiscoveryView{}
             .associate(&discovery)
+            .onSelected([=](const YeelightStatus &status) mutable {
+                stack.push(
+                    ColorController{status}
+                    .onDismissed([=]() mutable {
+                        stack.pop();
+                    })
+                );
+                // CC_INSPECT(status.address());
+            })
         )
         .run();
 }

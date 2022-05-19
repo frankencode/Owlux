@@ -5,6 +5,7 @@
 #include <cc/Map>
 #include <cc/Uri>
 #include <cc/input>
+#include <cc/str>
 #include <cc/DEBUG>
 
 namespace cc::yee {
@@ -168,6 +169,13 @@ public:
         return keyValueMap_("name");
     }
 
+    String displayName() const
+    {
+        String s = keyValueMap_("name");
+        if (s == "") s = "Light " + hex(id_);
+        return s;
+    }
+
     bool power() const
     {
         return power_;
@@ -231,6 +239,11 @@ long YeelightStatus::id() const
 String YeelightStatus::name() const
 {
     return me().name();
+}
+
+String YeelightStatus::displayName() const
+{
+    return me().displayName();
 }
 
 String YeelightStatus::model() const

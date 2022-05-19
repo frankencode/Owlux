@@ -10,9 +10,9 @@ namespace cc::yee {
 class YeelightResult final: public YeelightResponse
 {
 public:
-    YeelightResult() = default;
-
     static bool recognise(const MetaObject &message);
+
+    YeelightResult() = default;
 
     explicit YeelightResult(const MetaObject &message);
     explicit YeelightResult(const YeelightResponse &response);
