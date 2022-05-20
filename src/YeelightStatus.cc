@@ -1,5 +1,5 @@
-#include <yee/YeelightStatus>
-#include <yee/YeelightProtocolError>
+#include <owlux/YeelightStatus>
+#include <owlux/YeelightProtocolError>
 #include <cc/Format>
 #include <cc/Casefree>
 #include <cc/Map>
@@ -8,7 +8,7 @@
 #include <cc/str>
 #include <cc/DEBUG>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 struct YeelightStatus::State final: public Object::State
 {

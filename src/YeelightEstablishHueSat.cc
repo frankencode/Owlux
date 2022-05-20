@@ -1,7 +1,7 @@
-#include <yee/YeelightEstablishHueSat>
+#include <owlux/YeelightEstablishHueSat>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightEstablishHueSat::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightEstablishHueSat::State::toString() const
             << "hsv" << hue_ << sat_ << brightness_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

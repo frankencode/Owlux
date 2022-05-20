@@ -1,4 +1,4 @@
-#include <yee/YeelightTransition>
-#include <yee/YeelightColorTransition>
-#include <yee/YeelightColorTempTransition>
-#include <yee/YeelightSleepTransition>
+#include <owlux/YeelightTransition>
+#include <owlux/YeelightColorTransition>
+#include <owlux/YeelightColorTempTransition>
+#include <owlux/YeelightSleepTransition>

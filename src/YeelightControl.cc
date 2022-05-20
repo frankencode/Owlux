@@ -1,4 +1,4 @@
-#include <yee/YeelightControl>
+#include <owlux/YeelightControl>
 #include <cc/ClientSocket>
 #include <cc/Uri>
 #include <cc/System>
@@ -10,7 +10,7 @@
 #include <cc/json>
 #include <cc/DEBUG>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 struct YeelightControl::State: public Object::State
 {
@@ -38,12 +38,12 @@ struct YeelightControl::State: public Object::State
     {
         double nextTime = System::now();
         for (YeelightCommand command: requestChannel_) {
-            command->id_ = nextId_++;
+            if (command->id_ < 0) command->id_ = nextId_++;
             String json = command.toString();
             double nowTime = System::now();
             if (nextTime - nowTime > 0) {
                 if (shutdown_.acquireBefore(nextTime)) break;
-                nextTime = System::now() + timeInterval_;
+                nextTime += timeInterval_;
             }
             else {
                 nextTime = nowTime + timeInterval_;
@@ -118,4 +118,4 @@ YeelightControl::State &YeelightControl::me()
     return Object::me.as<State>();
 }
 
-} // namespace cc::yee
+} // namespace cc::

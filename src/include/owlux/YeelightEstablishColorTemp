@@ -1,0 +1,30 @@
+#pragma once
+
+#include <owlux/YeelightCommand>
+
+namespace cc::owlux {
+
+class YeelightEstablishColorTemp final: public YeelightCommand
+{
+public:
+    explicit YeelightEstablishColorTemp(int colorTemp, int brightness = 100):
+        YeelightCommand{new State{colorTemp, brightness}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(int colorTemp, int brightness):
+            YeelightCommand::State{"set_scene"},
+            colorTemp_{colorTemp},
+            brightness_{brightness}
+        {}
+
+        String toString() const override;
+
+        int colorTemp_;
+        int brightness_;
+    };
+};
+
+} // namespace cc::owlux

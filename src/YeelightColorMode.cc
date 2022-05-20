@@ -1,6 +1,6 @@
-#include <yee/YeelightColorMode>
+#include <owlux/YeelightColorMode>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String str(YeelightColorMode mode)
 {
@@ -17,4 +17,4 @@ String str(YeelightColorMode mode)
     return s;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

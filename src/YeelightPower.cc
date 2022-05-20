@@ -1,7 +1,7 @@
-#include <yee/YeelightPower>
+#include <owlux/YeelightPower>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightPower::State::toString() const
 {
@@ -18,4 +18,4 @@ String YeelightPower::State::toString() const
             << +colorMode_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

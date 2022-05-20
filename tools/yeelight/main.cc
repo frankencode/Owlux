@@ -1,20 +1,20 @@
-#include <yee/YeelightDiscovery>
-#include <yee/YeelightControl>
-#include <yee/YeelightPower>
-#include <yee/YeelightSetBrightness>
-#include <yee/YeelightSetColor>
-#include <yee/YeelightSetColorTemp>
-#include <yee/YeelightSetHueSat>
-#include <yee/YeelightSetName>
-#include <yee/YeelightSave>
-#include <yee/YeelightStartColorFlow>
-#include <yee/YeelightStopColorFlow>
-#include <yee/YeelightEstablishColorFlow>
-#include <yee/YeelightEstablishAutoDelayOff>
-#include <yee/setup/YeelightSecretHello>
-#include <yee/setup/YeelightSecretStatus>
-#include <yee/setup/YeelightSecretSetup>
-#include <yee/setup/YeelightSecretResult>
+#include <owlux/YeelightDiscovery>
+#include <owlux/YeelightControl>
+#include <owlux/YeelightPower>
+#include <owlux/YeelightSetBrightness>
+#include <owlux/YeelightSetColor>
+#include <owlux/YeelightSetColorTemp>
+#include <owlux/YeelightSetHueSat>
+#include <owlux/YeelightSetName>
+#include <owlux/YeelightSave>
+#include <owlux/YeelightStartColorFlow>
+#include <owlux/YeelightStopColorFlow>
+#include <owlux/YeelightEstablishColorFlow>
+#include <owlux/YeelightEstablishAutoDelayOff>
+#include <owlux/setup/YeelightSecretHello>
+#include <owlux/setup/YeelightSecretStatus>
+#include <owlux/setup/YeelightSecretSetup>
+#include <owlux/setup/YeelightSecretResult>
 #include <cc/NetworkInterface>
 #include <cc/NetworkState>
 #include <cc/DatagramSocket>
@@ -31,7 +31,7 @@
 #include <unistd.h>
 #include <termios.h>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String getString(const String &prompt)
 {
@@ -54,12 +54,12 @@ String getPassword(const String &prompt)
     return text;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux
 
 int main(int argc, char *argv[])
 {
     using namespace cc;
-    using namespace cc::yee;
+    using namespace cc::owlux;
 
     String toolName = String{argv[0]}.baseName();
     int exitStatus = 0;

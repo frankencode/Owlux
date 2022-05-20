@@ -1,0 +1,25 @@
+#pragma once
+
+#include <owlux/YeelightCommand>
+
+namespace cc::owlux {
+
+class YeelightSave final: public YeelightCommand
+{
+public:
+    YeelightSave():
+        YeelightCommand{new State}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State():
+            YeelightCommand::State{"set_default"}
+        {}
+
+        String toString() const override;
+    };
+};
+
+} // namespace cc::owlux

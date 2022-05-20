@@ -1,7 +1,7 @@
-#include <yee/YeelightSave>
+#include <owlux/YeelightSave>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightSave::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightSave::State::toString() const
             << id_ << method_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

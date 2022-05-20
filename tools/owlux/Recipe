@@ -1,0 +1,10 @@
+Application {
+    name: owlux
+    use: [
+        CoreComponents/Core,
+        CoreComponents/Network,
+        CoreComponents/Glob,
+        CoreComponents/UX,
+        Owlux
+    ]
+}

@@ -3,6 +3,6 @@ Tests {
         CoreComponents/Core,
         CoreComponents/Crypto,
         CoreComponents/Testing,
-        Yeelight
+        Owlux
     ]
 }

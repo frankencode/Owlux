@@ -1,7 +1,7 @@
-#include <yee/YeelightSetHueSat>
+#include <owlux/YeelightSetHueSat>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightSetHueSat::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightSetHueSat::State::toString() const
             << hue_ << sat_ << yeeStr(effect_) << duration_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

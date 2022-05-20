@@ -1,0 +1,55 @@
+#pragma once
+
+#include <owlux/YeelightResponse>
+#include <owlux/YeelightColorMode>
+#include <cc/Variant>
+#include <cc/Color>
+#include <cc/Object>
+
+namespace cc { class MetaObject; }
+
+namespace cc::owlux {
+
+class YeelightUpdate final: public YeelightResponse
+{
+public:
+    static bool recognise(const MetaObject &message);
+
+    YeelightUpdate() = default;
+
+    explicit YeelightUpdate(const MetaObject &message);
+    explicit YeelightUpdate(const YeelightResponse &response);
+
+    const Map<String, Variant> &change() const;
+    Variant change(const String &key) const;
+
+    bool hasPowerChanged() const;
+    bool newPower() const;
+
+    bool hasColorTempChanged() const;
+    int newColorTemp() const;
+
+    bool hasBrightnessChanged() const;
+    int newBrightness() const;
+
+    bool hasColorChanged() const;
+    Color newColor() const;
+
+    bool hasHueChanged() const;
+    int newHue() const;
+
+    bool hasSatChanged() const;
+    int newSat() const;
+
+    bool hasColorModeChanged() const;
+    YeelightColorMode newColorMode() const;
+
+private:
+    friend class Object;
+
+    struct State;
+
+    const State &me() const;
+};
+
+} // namespace cc::owlux

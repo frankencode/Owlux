@@ -1,7 +1,7 @@
-#include <yee/YeelightEstablishAutoDelayOff>
+#include <owlux/YeelightEstablishAutoDelayOff>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightEstablishAutoDelayOff::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightEstablishAutoDelayOff::State::toString() const
             << "auto_delay_off" << brightness_ << delay_;
 }
 
-} // namespae cc::yee
+} // namespae cc::owlux

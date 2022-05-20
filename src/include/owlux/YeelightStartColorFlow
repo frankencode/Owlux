@@ -1,0 +1,35 @@
+#pragma once
+
+#include <owlux/YeelightColorFlow>
+#include <owlux/YeelightCommand>
+
+namespace cc::owlux {
+
+class YeelightStartColorFlow final: public YeelightCommand
+{
+public:
+    explicit YeelightStartColorFlow(const YeelightColorFlow &flow):
+        YeelightCommand{new State{flow}}
+    {}
+
+    explicit YeelightStartColorFlow(const String &expression):
+        YeelightCommand{new State{YeelightColorFlow{expression}}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(const YeelightColorFlow &flow):
+            YeelightCommand::State{"start_cf"},
+            flow_{flow}
+        {}
+
+        State(const String &expression);
+
+        String toString() const override;
+
+        YeelightColorFlow flow_;
+    };
+};
+
+} // namespace cc::owlux

@@ -1,7 +1,7 @@
-#include <yee/YeelightEstablishColorTemp>
+#include <owlux/YeelightEstablishColorTemp>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightEstablishColorTemp::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightEstablishColorTemp::State::toString() const
             << "ct" << colorTemp_ << brightness_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

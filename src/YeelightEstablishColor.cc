@@ -1,7 +1,7 @@
-#include <yee/YeelightEstablishColor>
+#include <owlux/YeelightEstablishColor>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightEstablishColor::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightEstablishColor::State::toString() const
             << "color" << (color_.value() & 0xFFFFFF) << brightness_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

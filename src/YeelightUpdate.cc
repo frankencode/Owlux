@@ -1,9 +1,9 @@
-#include <yee/YeelightUpdate>
-#include <yee/YeelightProtocolError>
+#include <owlux/YeelightUpdate>
+#include <owlux/YeelightProtocolError>
 #include <cc/MetaObject>
 #include <cc/json>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 struct YeelightUpdate::State: public YeelightResponse::State
 {
@@ -131,4 +131,4 @@ const YeelightUpdate::State &YeelightUpdate::me() const
     return Object::me.as<State>();
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

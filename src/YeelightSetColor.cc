@@ -1,7 +1,7 @@
-#include <yee/YeelightSetColor>
+#include <owlux/YeelightSetColor>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightSetColor::State::toString() const
 {
@@ -14,4 +14,4 @@ String YeelightSetColor::State::toString() const
             << (+color_ & 0xFFFFFFu) << yeeStr(effect_) << duration_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

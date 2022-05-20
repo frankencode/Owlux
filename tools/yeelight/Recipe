@@ -3,7 +3,7 @@ Application {
         CoreComponents/Core,
         CoreComponents/Network,
         CoreComponents/Glob,
-        Yeelight
+        Owlux
     ]
     depends: readline
 }

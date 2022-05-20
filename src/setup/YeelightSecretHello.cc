@@ -1,6 +1,6 @@
-#include <yee/setup/YeelightSecretHello>
+#include <owlux/setup/YeelightSecretHello>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 Bytes YeelightSecretHello::produce()
 {
@@ -10,4 +10,4 @@ Bytes YeelightSecretHello::produce()
     return message;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

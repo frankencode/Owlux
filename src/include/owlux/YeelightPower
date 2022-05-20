@@ -1,0 +1,36 @@
+#pragma once
+
+#include <owlux/YeelightCommand>
+#include <owlux/YeelightEffect>
+#include <owlux/YeelightColorMode>
+
+namespace cc::owlux {
+
+class YeelightPower final: public YeelightCommand
+{
+public:
+    explicit YeelightPower(bool on, YeelightEffect effect = YeelightEffect::Sudden, int duration = 0, YeelightColorMode colorMode = YeelightColorMode::Default):
+        YeelightCommand{new State{on, effect, duration, colorMode}}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State(bool on, YeelightEffect effect, int duration, YeelightColorMode colorMode):
+            YeelightCommand::State{"set_power"},
+            on_{on},
+            effect_{effect},
+            duration_{duration},
+            colorMode_{colorMode}
+        {}
+
+        String toString() const override;
+
+        bool on_;
+        YeelightEffect effect_;
+        int duration_;
+        YeelightColorMode colorMode_;
+    };
+};
+
+} // namespace cc::owlux

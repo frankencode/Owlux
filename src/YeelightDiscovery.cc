@@ -1,11 +1,11 @@
-#include <yee/YeelightDiscovery>
+#include <owlux/YeelightDiscovery>
 #include <cc/DatagramSocket>
 #include <cc/Semaphore>
 #include <cc/System>
 #include <cc/Thread>
 #include <cc/DEBUG>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 struct YeelightDiscovery::State: public Object::State
 {
@@ -166,4 +166,4 @@ YeelightDiscovery::State &YeelightDiscovery::me()
     return Object::me.as<State>();
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

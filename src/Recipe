@@ -1,5 +1,5 @@
 Library {
-    name: Yeelight
+    name: Owlux
     use: [
         CoreComponents/Core,
         CoreComponents/Glob,

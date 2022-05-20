@@ -1,6 +1,6 @@
-#include <yee/YeelightEffect>
+#include <owlux/YeelightEffect>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String yeeStr(YeelightEffect effect)
 {
@@ -14,4 +14,4 @@ String yeeStr(YeelightEffect effect)
     return s;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

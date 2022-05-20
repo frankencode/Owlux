@@ -1,4 +1,4 @@
-#include <yee/setup/YeelightSecretSetup>
+#include <owlux/setup/YeelightSecretSetup>
 #include <cc/AesBlockCipher>
 #include <cc/CbcBlockCipher>
 #include <cc/BlockCipherSink>
@@ -8,7 +8,7 @@
 #include <cc/Format>
 #include <cc/md5>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 struct YeelightSecretSetup::State: public YeelightSecretMessage::State
 {
@@ -63,4 +63,4 @@ YeelightSecretSetup::YeelightSecretSetup(
     YeelightSecretMessage{new State{status, token, networkName, networkPassword}}
 {}
 
-} // namespace cc::yee
+} // namespace cc::owlux

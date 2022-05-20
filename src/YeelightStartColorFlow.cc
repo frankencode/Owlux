@@ -1,7 +1,7 @@
-#include <yee/YeelightStartColorFlow>
+#include <owlux/YeelightStartColorFlow>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightStartColorFlow::State::toString() const
 {
@@ -16,4 +16,4 @@ String YeelightStartColorFlow::State::toString() const
             << flow_.toString();
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

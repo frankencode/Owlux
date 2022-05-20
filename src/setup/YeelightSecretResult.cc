@@ -1,7 +1,7 @@
-#include <yee/setup/YeelightSecretResult>
+#include <owlux/setup/YeelightSecretResult>
 #include <cc/json>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 YeelightSecretResult::YeelightSecretResult(const Bytes &message):
     YeelightSecretMessage{message}
@@ -15,4 +15,4 @@ YeelightResult YeelightSecretResult::decipherResult(const Bytes &token)
     return YeelightResult{messageValue.to<MetaObject>()};
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

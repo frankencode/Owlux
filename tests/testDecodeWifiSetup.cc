@@ -1,8 +1,8 @@
-#include <yee/setup/YeelightSecretHello>
-#include <yee/setup/YeelightSecretStatus>
-#include <yee/setup/YeelightSecretSetup>
-#include <yee/setup/YeelightSecretResult>
-#include <yee/setup/YeelightSecretMessage>
+#include <owlux/setup/YeelightSecretHello>
+#include <owlux/setup/YeelightSecretStatus>
+#include <owlux/setup/YeelightSecretSetup>
+#include <owlux/setup/YeelightSecretResult>
+#include <owlux/setup/YeelightSecretMessage>
 #include <cc/AesBlockCipher>
 #include <cc/CbcBlockCipher>
 #include <cc/BlockCipherSource>
@@ -17,7 +17,7 @@
 int main(int argc, char *argv[])
 {
     using namespace cc;
-    using namespace cc::yee;
+    using namespace cc::owlux;
 
     #if 0
     CC_INSPECT(fixed(System::now(), 0));

@@ -1,4 +1,4 @@
-#include <yee/setup/YeelightSecretMessage>
+#include <owlux/setup/YeelightSecretMessage>
 #include <cc/ByteSource>
 #include <cc/MemoryStream>
 #include <cc/CbcBlockCipher>
@@ -9,7 +9,7 @@
 #include <cc/HexDump> // DEBUG
 #include <cc/DEBUG>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 YeelightSecretMessage::State::State(const Bytes &message):
     message_{message}
@@ -57,4 +57,4 @@ YeelightSecretMessage::YeelightSecretMessage(State *newState):
     Object{newState}
 {}
 
-} // namespace cc::yee
+} // namespace cc::owlux

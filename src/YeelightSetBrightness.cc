@@ -1,7 +1,7 @@
-#include <yee/YeelightSetBrightness>
+#include <owlux/YeelightSetBrightness>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightSetBrightness::State::toString() const
 {
@@ -17,4 +17,4 @@ String YeelightSetBrightness::State::toString() const
             << duration_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

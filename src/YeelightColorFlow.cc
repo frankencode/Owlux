@@ -1,11 +1,11 @@
-#include <yee/YeelightColorFlow>
-#include <yee/YeelightProtocolError>
-#include <yee/YeelightColorTransition>
-#include <yee/YeelightColorTempTransition>
-#include <yee/YeelightSleepTransition>
+#include <owlux/YeelightColorFlow>
+#include <owlux/YeelightProtocolError>
+#include <owlux/YeelightColorTransition>
+#include <owlux/YeelightColorTempTransition>
+#include <owlux/YeelightSleepTransition>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 YeelightColorFlow::State::State(const String &expression)
 {
@@ -90,4 +90,4 @@ YeelightColorFlow YeelightColorFlow::alarm(const Color &color, int interval)
     };
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux

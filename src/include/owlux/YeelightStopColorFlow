@@ -1,0 +1,25 @@
+#pragma once
+
+#include <owlux/YeelightCommand>
+
+namespace cc::owlux {
+
+class YeelightStopColorFlow final: public YeelightCommand
+{
+public:
+    YeelightStopColorFlow():
+        YeelightCommand{new State}
+    {}
+
+private:
+    struct State: public YeelightCommand::State
+    {
+        State():
+            YeelightCommand::State{"stop_cf"}
+        {}
+
+        virtual String toString() const override;
+    };
+};
+
+} // namespace cc::owlux

@@ -1,0 +1,28 @@
+#pragma once
+
+#include <cc/String>
+#include <cc/Object>
+
+namespace cc::owlux {
+
+class YeelightResponse: public Object
+{
+public:
+    YeelightResponse() = default;
+
+    String toString() const { return me().toString(); }
+
+protected:
+    struct State: public Object::State
+    {
+        virtual String toString() const = 0;
+    };
+
+    explicit YeelightResponse(State *newState):
+        Object{newState}
+    {}
+
+    const State &me() const { return Object::me.as<State>(); }
+};
+
+} // namespace cc::owlux

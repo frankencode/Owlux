@@ -1,0 +1,53 @@
+#pragma once
+
+#include <cc/Object>
+#include <array>
+
+namespace cc::owlux {
+
+class YeelightTransition: public Object
+{
+public:
+    enum class Type: int {
+        ColorChange = 1,
+        ColorTempChange = 2,
+        Sleep = 7
+    };
+
+    YeelightTransition() = default;
+
+    Type type() const { return me().type_; }
+
+    int duration() const { return me().duration_; }
+
+    using Tuple = std::array<int, 4>;
+
+    Tuple toTuple() const { return me().toTuple(); }
+
+protected:
+    struct State: public Object::State
+    {
+        State(Type type, int duration):
+            type_{type},
+            duration_{duration}
+        {
+            if (duration_ < 50) duration_ = 50;
+        }
+
+        virtual Tuple toTuple() const = 0;
+
+        Type type() const { return type_; }
+        int duration() const { return duration_; }
+
+        Type type_;
+        int duration_;
+    };
+
+    explicit YeelightTransition(State *newState):
+        Object{newState}
+    {}
+
+    const State &me() const { return Object::me.as<State>(); }
+};
+
+} // namespace cc::owlux

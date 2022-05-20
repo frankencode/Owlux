@@ -1,0 +1,52 @@
+#pragma once
+
+#include <owlux/YeelightColorMode>
+#include <cc/SocketAddress>
+#include <cc/Version>
+#include <cc/Color>
+#include <cc/Set>
+
+namespace cc::owlux {
+
+class YeelightStatus final: public Object
+{
+public:
+    YeelightStatus() = default;
+
+    YeelightStatus(const SocketAddress &address, const String &message);
+
+    SocketAddress address() const;
+    long refreshInterval() const;
+
+    long id() const;
+    String name() const;
+
+    String displayName() const;
+
+    String model() const;
+    const Set<String> &supportedMethods() const;
+    Version firmwareVersion() const;
+
+    bool power() const;
+    int brightness() const;
+
+    YeelightColorMode colorMode() const;
+
+    int colorTemp() const;
+    Color color() const;
+
+    int hue() const;
+    int sat() const;
+
+    String operator()(const String &key) const;
+
+    String toString() const;
+
+private:
+    struct State;
+
+    State &me();
+    const State &me() const;
+};
+
+} // namespace cc::owlux

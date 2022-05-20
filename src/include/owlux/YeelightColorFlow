@@ -1,0 +1,53 @@
+#pragma once
+
+#include <owlux/YeelightTransition>
+#include <cc/Color>
+#include <cc/String>
+
+namespace cc::owlux {
+
+class YeelightColorFlow final: public Object
+{
+public:
+    enum class Closure: int {
+        Repeat = -1,
+        Return = 0,
+        Stay = 1,
+        Off = 2,
+    };
+
+    static YeelightColorFlow alarm(const Color &color = 0xFF0000u, int interval = 800);
+
+    explicit YeelightColorFlow(std::initializer_list<YeelightTransition> transitions, Closure closure = Closure::Stay):
+        Object{new State{transitions, closure}}
+    {}
+
+    explicit YeelightColorFlow(const String &expression):
+        Object{new State{expression}}
+    {}
+
+    const List<YeelightTransition> &transitions() const { return me().transitions_; }
+    Closure closure() const { return me().closure_; }
+
+    String toString() const { return me().toString(); }
+
+private:
+    struct State: public Object::State
+    {
+        explicit State(std::initializer_list<YeelightTransition> transitions, Closure closure):
+            transitions_{transitions},
+            closure_{closure}
+        {}
+
+        explicit State(const String &expression);
+
+        String toString() const;
+
+        List<YeelightTransition> transitions_;
+        Closure closure_ { Closure::Return };
+    };
+
+    const State &me() const { return Object::me.as<State>(); }
+};
+
+} // namespace cc::owlux

@@ -1,7 +1,7 @@
-#include <yee/YeelightSetName>
+#include <owlux/YeelightSetName>
 #include <cc/Format>
 
-namespace cc::yee {
+namespace cc::owlux {
 
 String YeelightSetName::State::toString() const
 {
@@ -15,4 +15,4 @@ String YeelightSetName::State::toString() const
             << name_;
 }
 
-} // namespace cc::yee
+} // namespace cc::owlux
