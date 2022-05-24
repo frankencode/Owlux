@@ -1,0 +1,49 @@
+#pragma once
+
+#include <cc/StreamSocket>
+#include <cc/Thread>
+
+namespace cc::owlux {
+
+class YeelightMusicServerConnection: public Object
+{
+public:
+    YeelightMusicServerConnection() = default;
+
+    YeelightMusicServerConnection(const StreamSocket &client):
+        Object{new State{client}}
+    {}
+
+    void start(Thread &&thread) { me().start(move(thread)); }
+
+    StreamSocket client() const { return me().client_; }
+    Thread thread() const { return me().thread_; }
+
+private:
+    struct State: public Object::State
+    {
+        State(const StreamSocket &client):
+            client_{client}
+        {}
+
+        ~State()
+        {
+            client_.shutdown();
+            thread_.wait();
+        }
+
+        void start(Thread &&thread)
+        {
+            thread_ = move(thread);
+            thread_.start();
+        }
+
+        StreamSocket client_;
+        Thread thread_;
+    };
+
+    State &me() { return Object::me.as<State>(); }
+    const State &me() const { return Object::me.as<State>(); }
+};
+
+} // namespace cc::owlux

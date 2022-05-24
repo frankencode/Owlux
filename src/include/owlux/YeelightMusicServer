@@ -1,0 +1,40 @@
+#pragma once
+
+#include <cc/Object>
+#include <cc/SocketAddress>
+
+namespace cc::owlux {
+
+/** \brief Abstract TCP server for Yeelight music mode
+  */
+class YeelightMusicServer: public Object
+{
+public:
+    /** Create a null music server
+      */
+    YeelightMusicServer() = default;
+
+    /** Start the music server in a background thread
+      */
+    void start();
+
+    /** Request server shutdown
+      */
+    void shutdown();
+
+    /** Wait for server shutdown
+      */
+    void wait();
+
+protected:
+    /** Internal state
+      */
+    struct State;
+
+    explicit YeelightMusicServer(State *newState);
+
+    State &me() { return Object::me.as<State>(); }
+    const State &me() const { return Object::me.as<State>(); }
+};
+
+} // namespace cc::owlux

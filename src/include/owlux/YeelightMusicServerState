@@ -1,0 +1,55 @@
+#include <owlux/YeelightMusicServer>
+#include <owlux/YeelightMusicServerConnection>
+#include <cc/Semaphore>
+#include <cc/ServerSocket>
+#include <cc/Map>
+#include <cc/Channel>
+
+namespace cc::owlux {
+
+struct YeelightMusicServer::State: public Object::State
+{
+    State();
+    ~State();
+
+    /** Called when the server is ready to accept connections
+      * \param address Listening address of the server
+      * \note This method is called from another thread.
+      */
+    virtual void ready(const SocketAddress &address) = 0;
+
+    /** Inform about a newly established connection to \a client
+      * \note This method is called from another thread.
+      */
+    virtual void connected(const SocketAddress &client) {}
+
+    /** Inform about the termination of the conncetion to \a client
+      * \note This method is called from another thread.
+      */
+    virtual void disconnected(const SocketAddress &client) {}
+
+    /** Generate the next Yeelight protocol command for \a client
+      * \note This method is called from another thread.
+      */
+    virtual String serve(const SocketAddress &client) = 0;
+
+private:
+    friend class YeelightMusicServer;
+
+    void start();
+    void shutdown();
+    void wait();
+
+    void runServer();
+    void runWorker(const YeelightMusicServerConnection &connection);
+
+    Thread thread_;
+    Semaphore<int> shutdown_;
+    Fun<void(const SocketAddress &)> started_;
+    SocketAddress address_ { ProtocolFamily::Inet4, "*" };
+    ServerSocket socket_;
+    Map<SocketAddress, YeelightMusicServerConnection> connections_;
+    Channel<YeelightMusicServerConnection> terminated_;
+};
+
+} // namespace cc::owlux
