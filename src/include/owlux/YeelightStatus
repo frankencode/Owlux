@@ -8,6 +8,8 @@
 
 namespace cc::owlux {
 
+class YeelightUpdate;
+
 class YeelightStatus final: public Object
 {
 public:
@@ -28,6 +30,8 @@ public:
     Version firmwareVersion() const;
 
     bool power() const;
+    void setPower(bool on);
+
     int brightness() const;
 
     YeelightColorMode colorMode() const;
@@ -41,6 +45,9 @@ public:
     String operator()(const String &key) const;
 
     String toString() const;
+
+    void update(const YeelightUpdate &update);
+    void update(const YeelightStatus &update);
 
 private:
     struct State;

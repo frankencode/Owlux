@@ -1,9 +1,11 @@
 #include <owlux/YeelightStatus>
 #include <owlux/YeelightProtocolError>
+#include <owlux/YeelightUpdate>
 #include <cc/Format>
 #include <cc/Casefree>
 #include <cc/Map>
 #include <cc/Uri>
+#include <cc/Property>
 #include <cc/input>
 #include <cc/str>
 #include <cc/DEBUG>
@@ -23,6 +25,7 @@ public:
 
         for (const String &line: lines) readKeyValue(line);
 
+        readName();
         readCacheControl();
         readLocation();
         readId();
@@ -63,6 +66,11 @@ public:
         }
     }
 
+    void readName()
+    {
+        name = keyValueMap_.value("name");
+    }
+
     void readCacheControl()
     {
         String text;
@@ -100,33 +108,33 @@ public:
     {
         String text;
         YEELIGHT_EXPECT(keyValueMap_.lookup("power", &text));
-        YEELIGHT_EXPECT(text.read<bool>(&power_));
+        YEELIGHT_EXPECT(power.readFrom(text));
     }
 
     void readBrightness()
     {
         String text;
         YEELIGHT_EXPECT(keyValueMap_.lookup("bright", &text));
-        YEELIGHT_EXPECT(text.read<int>(&brightness_));
-        YEELIGHT_EXPECT(0 <= brightness_ && brightness_ <= 100);
+        YEELIGHT_EXPECT(brightness.readFrom(text));
+        YEELIGHT_EXPECT(0 <= brightness() && brightness() <= 100);
     }
 
     void readColorMode()
     {
         String text;
         if (!keyValueMap_.lookup("color_mode", &text)) return;
-        int colorMode = 0;
-        YEELIGHT_EXPECT(text.read<int>(&colorMode));
-        YEELIGHT_EXPECT(+YeelightColorMode::Min <= colorMode && colorMode <= +YeelightColorMode::Max);
-        colorMode_ = static_cast<YeelightColorMode>(colorMode);
+        int mode = 0;
+        YEELIGHT_EXPECT(text.read<int>(&mode));
+        YEELIGHT_EXPECT(+YeelightColorMode::Min <= mode && mode <= +YeelightColorMode::Max);
+        colorMode = static_cast<YeelightColorMode>(mode);
     }
 
     void readColorTemp()
     {
         String text;
         if (!keyValueMap_.lookup("ct", &text)) return;
-        YEELIGHT_EXPECT(text.read<int>(&colorTemp_));
-        YEELIGHT_EXPECT(colorTemp_ > 0);
+        YEELIGHT_EXPECT(colorTemp.readFrom(text));
+        YEELIGHT_EXPECT(colorTemp() > 0);
     }
 
     void readColor()
@@ -135,23 +143,23 @@ public:
         if (!keyValueMap_.lookup("rgb", &text)) return;
         std::uint32_t rgb = 0;
         YEELIGHT_EXPECT(text.read<std::uint32_t>(&rgb));
-        color_ = rgb;
+        color = rgb;
     }
 
     void readHue()
     {
         String text;
         if (!keyValueMap_.lookup("hue", &text)) return;
-        YEELIGHT_EXPECT(text.read<int>(&hue_));
-        YEELIGHT_EXPECT(0 <= hue_ && hue_ <= 359);
+        YEELIGHT_EXPECT(hue.readFrom(text));
+        YEELIGHT_EXPECT(0 <= hue() && hue() <= 359);
     }
 
     void readSat()
     {
         String text;
         if (!keyValueMap_.lookup("sat", &text)) return;
-        YEELIGHT_EXPECT(text.read<int>(&sat_));
-        YEELIGHT_EXPECT(0 <= sat_ && sat_ <= 100);
+        YEELIGHT_EXPECT(sat.readFrom(text));
+        YEELIGHT_EXPECT(0 <= sat() && sat() <= 100);
     }
 
     String model() const
@@ -164,21 +172,11 @@ public:
         return keyValueMap_("fw_ver");
     }
 
-    String name() const
-    {
-        return keyValueMap_("name");
-    }
-
     String displayName() const
     {
-        String s = keyValueMap_("name");
+        String s = name();
         if (s == "") s = "Light " + hex(id_);
         return s;
-    }
-
-    bool power() const
-    {
-        return power_;
     }
 
     String toString() const
@@ -192,14 +190,38 @@ public:
             << "  refresh-interval: " << refreshInterval_ << "\n"
             << "  supported-methods: " << supportedMethods_ << "\n"
             << "  firmware-version: " << firmwareVersion() << "\n"
-            << "  power: " << power_ << "\n"
-            << "  brightness: " << brightness_ << "\n"
-            << "  color-mode: " << colorMode_ << "\n"
-            << "  color-temp: " << colorTemp_ << "\n"
-            << "  color: " << color_ << "\n"
-            << "  hue: " << hue_ << "\n"
-            << "  sat: " << sat_ << "\n"
+            << "  power: " << power() << "\n"
+            << "  brightness: " << brightness() << "\n"
+            << "  color-mode: " << colorMode() << "\n"
+            << "  color-temp: " << colorTemp() << "\n"
+            << "  color: " << color() << "\n"
+            << "  hue: " << hue() << "\n"
+            << "  sat: " << sat() << "\n"
             << "}";
+    }
+
+    void update(const YeelightUpdate &update)
+    {
+        if (update.hasNameChanged()) name = update.newName();
+        if (update.hasPowerChanged()) power = update.newPower();
+        if (update.hasBrightnessChanged()) brightness = update.newBrightness();
+        if (update.hasColorModeChanged()) colorMode = update.newColorMode();
+        if (update.hasColorTempChanged()) colorTemp = update.newColorTemp();
+        if (update.hasColorChanged()) color = update.newColor();
+        if (update.hasHueChanged()) hue = update.newHue();
+        if (update.hasSatChanged()) sat = update.newSat();
+    }
+
+    void update(const YeelightStatus &update)
+    {
+        name = update.name();
+        power = update.power();
+        brightness = update.brightness();
+        colorMode = update.colorMode();
+        colorTemp = update.colorTemp();
+        color = update.color();
+        hue = update.hue();
+        sat = update.sat();
     }
 
     Map<Casefree<String>, String> keyValueMap_;
@@ -208,13 +230,14 @@ public:
     SocketAddress address_;
     long refreshInterval_ { -1 };
     long id_ { -1 };
-    bool power_ { false };
-    int brightness_ { -1 };
-    YeelightColorMode colorMode_ { YeelightColorMode::Undef };
-    int colorTemp_ { -1 };
-    Color color_;
-    int hue_ { -1 };
-    int sat_ { -1 };
+    Property<String> name;
+    Property<bool> power { false };
+    Property<int> brightness { -1 };
+    Property<YeelightColorMode> colorMode { YeelightColorMode::Undef };
+    Property<int> colorTemp { -1 };
+    Property<Color> color;
+    Property<int> hue { -1 };
+    Property<int> sat { -1 };
 };
 
 YeelightStatus::YeelightStatus(const SocketAddress &address, const String &message):
@@ -263,37 +286,42 @@ Version YeelightStatus::firmwareVersion() const
 
 bool YeelightStatus::power() const
 {
-    return me().power_;
+    return me().power();
+}
+
+void YeelightStatus::setPower(bool on)
+{
+    me().power(on);
 }
 
 int YeelightStatus::brightness() const
 {
-    return me().brightness_;
+    return me().brightness();
 }
 
 YeelightColorMode YeelightStatus::colorMode() const
 {
-    return me().colorMode_;
+    return me().colorMode();
 }
 
 int YeelightStatus::colorTemp() const
 {
-    return me().colorTemp_;
+    return me().colorTemp();
 }
 
 Color YeelightStatus::color() const
 {
-    return me().color_;
+    return me().color();
 }
 
 int YeelightStatus::hue() const
 {
-    return me().hue_;
+    return me().hue();
 }
 
 int YeelightStatus::sat() const
 {
-    return me().sat_;
+    return me().sat();
 }
 
 String YeelightStatus::operator()(const String &key) const
@@ -304,6 +332,16 @@ String YeelightStatus::operator()(const String &key) const
 String YeelightStatus::toString() const
 {
     return me().toString();
+}
+
+void YeelightStatus::update(const YeelightUpdate &update)
+{
+    me().update(update);
+}
+
+void YeelightStatus::update(const YeelightStatus &update)
+{
+    me().update(update);
 }
 
 YeelightStatus::State &YeelightStatus::me()

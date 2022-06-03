@@ -13,6 +13,8 @@ namespace cc::owlux {
 class YeelightControl final: public Object
 {
 public:
+    enum Mode { Sync, Async };
+
     YeelightControl() = default;
 
     explicit YeelightControl(const SocketAddress &address);

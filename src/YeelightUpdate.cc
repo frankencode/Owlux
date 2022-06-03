@@ -56,6 +56,16 @@ Variant YeelightUpdate::change(const String &key) const
     return me().change_(key);
 }
 
+bool YeelightUpdate::hasNameChanged() const
+{
+    return change().contains("name");
+}
+
+String YeelightUpdate::newName() const
+{
+    return change("name").to<String>();
+}
+
 bool YeelightUpdate::hasPowerChanged() const
 {
     return change().contains("power");
@@ -63,7 +73,7 @@ bool YeelightUpdate::hasPowerChanged() const
 
 bool YeelightUpdate::newPower() const
 {
-    return change("power").to<bool>();
+    return change("power").to<String>() == "on";
 }
 
 bool YeelightUpdate::hasColorTempChanged() const

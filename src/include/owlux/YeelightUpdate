@@ -18,10 +18,14 @@ public:
     YeelightUpdate() = default;
 
     explicit YeelightUpdate(const MetaObject &message);
-    explicit YeelightUpdate(const YeelightResponse &response);
+
+    YeelightUpdate(const YeelightResponse &response);
 
     const Map<String, Variant> &change() const;
     Variant change(const String &key) const;
+
+    bool hasNameChanged() const;
+    String newName() const;
 
     bool hasPowerChanged() const;
     bool newPower() const;

@@ -37,21 +37,13 @@ struct YeelightControl::State: public Object::State
     void runCommandFeed()
     {
         double nextTime = System::now();
-        for (YeelightCommand command: requestChannel_) {
+        do {
+            YeelightCommand command;
+            if (!requestChannel_.read(&command)) break;
             if (command->id_ < 0) command->id_ = nextId_++;
-            String json = command.toString();
-            double nowTime = System::now();
-            if (nextTime - nowTime > 0) {
-                if (shutdown_.acquireBefore(nextTime)) break;
-                nextTime += timeInterval_;
-            }
-            else {
-                nextTime = nowTime + timeInterval_;
-            }
-            // CC_INSPECT(json);
-            // CC_INSPECT(hex(json));
-            socket_.write(json);
-        }
+            nextTime = System::now() + timeInterval_;
+            socket_.write(command.toString());
+        } while (!shutdown_.acquireBefore(nextTime));
     }
 
     void runResponseConsumer()
@@ -72,15 +64,18 @@ struct YeelightControl::State: public Object::State
     YeelightResult execute(const YeelightCommand &command)
     {
         requestChannel_.write(command);
+        return waitForResult(command.id());
+    }
 
+    YeelightResult waitForResult(int commandId)
+    {
         YeelightResult result;
         for (YeelightResponse response; responseChannel_.read(&response);) {
             result = YeelightResult{response};
             if (result) {
-                if (result.commandId() == command.id()) break;
+                if (result.commandId() == commandId) break;
             }
         }
-
         return result;
     }
 

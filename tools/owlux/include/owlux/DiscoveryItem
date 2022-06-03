@@ -1,0 +1,40 @@
+#pragma once
+
+#include <owlux/YeelightStatus>
+#include <cc/Control>
+
+namespace cc::owlux {
+
+/** \brief Display status of a Yeelight light
+  */
+class DiscoveryItem final: public Control
+{
+public:
+    /** Create a null discovery item
+      */
+    DiscoveryItem() = default;
+
+    /** Create a new discovery item
+      */
+    explicit DiscoveryItem(const YeelightStatus &status);
+
+    /** Get a weak reference in \a self
+      */
+    DiscoveryItem &associate(Out<DiscoveryItem> self);
+
+    /** Get access to the light's status
+      */
+    YeelightStatus status() const;
+
+    /** Set a new light status
+      */
+    DiscoveryItem &status(const YeelightStatus &status);
+
+private:
+    struct State;
+
+    State &me();
+    const State &me() const;
+};
+
+} // namespace cc::owlux

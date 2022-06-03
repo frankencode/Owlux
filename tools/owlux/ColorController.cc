@@ -1,9 +1,10 @@
-#include <beelight/ColorController>
+#include <owlux/ColorController>
 #include <owlux/YeelightControl>
 #include <owlux/YeelightPower>
 #include <owlux/YeelightSetBrightness>
 #include <owlux/YeelightSetColorTemp>
 #include <owlux/YeelightSetHueSat>
+#include <cc/Application>
 #include <cc/ColumnLayout>
 #include <cc/AppBar>
 #include <cc/Text>
@@ -21,16 +22,18 @@ struct ColorController::State: public View::State
 {
     State(const YeelightStatus &status):
         control_{status.address()},
+        status_{status},
         responseWorker_{[this]{ responseWorker(); }}
     {
         add(
             AppBar{}
             .associate(&appBar_)
-            .title(
-                status.name() != "" ?
-                Format{"Light \"%%\""}.arg(status.name()) :
-                Format{"Light %%"}.arg(status.id())
-            )
+            .title([this]{
+                return
+                    status_.name() != "" ?
+                    Format{"Light \"%%\""}.arg(status_.name()) :
+                    Format{"Light %%"}.arg(status_.id());
+            })
         );
 
         addBelow(
@@ -41,9 +44,10 @@ struct ColorController::State: public View::State
             .add(
                 Switch{"Power"}
                 .associate(&powerSwitch_)
-                .value(status.power())
-                .onValueChanged([this]{
-                    control_.requestChannel().pushBack(YeelightPower{powerSwitch_.value()});
+                .value(status_.power())
+                .onUserInput([this]{
+                    control_.requestChannel().pushExclusive(YeelightPower{powerSwitch_.value()});
+                    status_.setPower(powerSwitch_.value());
                 })
             )
             .add(Divider{})
@@ -55,7 +59,7 @@ struct ColorController::State: public View::State
                 .min(1)
                 .max(100)
                 .value(status.brightness())
-                .onValueChanged([this]{
+                .onUserInput([this]{
                     control_.requestChannel().pushExclusive(
                         YeelightSetBrightness{
                             static_cast<int>(brightSlider_.value())
@@ -134,12 +138,32 @@ struct ColorController::State: public View::State
 
     void responseWorker()
     {
-        for (YeelightResponse response: control_.responseChannel());
-        #if 0
+        for (YeelightResponse response: control_.responseChannel())
         {
-            ferr() << response << nl;
+            // ferr() << response << nl;
+
+            YeelightUpdate update = response;
+            if (update) {
+                Application{}.postEvent([this, update]{
+                    status_.update(update);
+                    if (update.hasPowerChanged()) {
+                        powerSwitch_.value(update.newPower());
+                    }
+                    if (update.hasBrightnessChanged() && !brightSlider_.isDragged()) {
+                        brightSlider_.value(update.newBrightness());
+                    }
+                    if (update.hasColorTempChanged() && !tempSlider_.isDragged()) {
+                        tempSlider_.value(update.newColorTemp());
+                    }
+                    if (update.hasHueChanged() && !hueSlider_.isDragged()) {
+                        hueSlider_.value(update.newHue());
+                    }
+                    if (update.hasSatChanged() && !satSlider_.isDragged()) {
+                        satSlider_.value(update.newSat());
+                    }
+                });
+            }
         }
-        #endif
     }
 
     AppBar appBar_;
@@ -149,6 +173,7 @@ struct ColorController::State: public View::State
     Slider hueSlider_;
     Slider satSlider_;
     YeelightControl control_;
+    YeelightStatus status_;
     Thread responseWorker_;
 };
 

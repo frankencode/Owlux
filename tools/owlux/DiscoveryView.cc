@@ -1,5 +1,5 @@
-#include <beelight/DiscoveryView>
-#include <beelight/StatusItem>
+#include <owlux/DiscoveryView>
+#include <owlux/DiscoveryItem>
 #include <owlux/YeelightDiscovery>
 #include <cc/Application>
 #include <cc/Thread>
@@ -26,8 +26,6 @@ struct DiscoveryView::State final: public View::State
             }
         }};
 
-        discoveryThread_.start();
-
         add(
             AppBar{}
             .associate(&appBar_)
@@ -40,6 +38,8 @@ struct DiscoveryView::State final: public View::State
             .pos(0, appBar_.height())
             .size([this]{ return size() - Size{0, appBar_.height()}; })
         );
+
+        discoveryThread_.start();
     }
 
     ~State()
@@ -50,20 +50,20 @@ struct DiscoveryView::State final: public View::State
 
     void statusUpdate(const YeelightStatus &status)
     {
+        CC_INSPECT(status);
         Locator target;
         if (itemByAddress_.find(status.address(), &target)) {
-            itemByAddress_.valueAt(target).status(status);
+            itemByAddress_.at(target).value().status().update(status);
         }
         else {
-            StatusItem item;
+            DiscoveryItem item;
 
             listMenu_.carrier().insertAt(
                 target.index(),
-                StatusItem{status}
+                DiscoveryItem{status}
                     .associate(&item)
                     .onClicked([this,item]{
                         onSelected_(item.status());
-                        // ferr() << item.status().address() << nl;
                     })
             );
 
@@ -73,7 +73,7 @@ struct DiscoveryView::State final: public View::State
 
     YeelightDiscovery listener_;
     Thread discoveryThread_;
-    Map<SocketAddress, StatusItem> itemByAddress_;
+    Map<SocketAddress, DiscoveryItem> itemByAddress_;
 
     AppBar appBar_;
     ListMenu listMenu_;
