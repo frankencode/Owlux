@@ -36,6 +36,9 @@ struct ColorController::State: public View::State
                     Format{"Light \"%%\""}.arg(status_.name()) :
                     Format{"Light %%"}.arg(status_.id());
             })
+            .onDismissed([this]{
+                if (dismissed_) dismissed_();
+            })
         );
 
         const bool needSaveButton =
@@ -173,6 +176,13 @@ struct ColorController::State: public View::State
     {
         for (YeelightResponse response: control_.responseChannel())
         {
+            if (!response) {
+                Application{}.postEvent([this]{
+                    if (dismissed_) dismissed_();
+                });
+                break;
+            }
+
             ferr() << response << nl;
 
             YeelightUpdate update = response;
@@ -200,6 +210,7 @@ struct ColorController::State: public View::State
     }
 
     AppBar appBar_;
+    Fun<void()> dismissed_;
     Switch powerSwitch_;
     Slider brightSlider_;
     Slider tempSlider_;
@@ -221,7 +232,7 @@ ColorController &ColorController::associate(Out<ColorController> self)
 
 ColorController &ColorController::onDismissed(Fun<void()> &&f)
 {
-    me().appBar_.onDismissed(move(f));
+    me().dismissed_ = move(f);
     return *this;
 }
 

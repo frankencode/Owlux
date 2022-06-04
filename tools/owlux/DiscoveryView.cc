@@ -29,7 +29,7 @@ struct DiscoveryView::State final: public View::State
         add(
             AppBar{}
             .associate(&appBar_)
-            .title("Owlux")
+            .title("Lights")
         );
 
         addBelow(

@@ -29,8 +29,11 @@ struct YeelightControl::State: public Object::State
         shutdown_.release();
         requestChannel_.close();
         commandFeed_.wait();
-
-        socket_.shutdown();
+        try {
+            socket_.shutdown();
+        }
+        catch (...)
+        {}
         responseConsumer_.wait();
     }
 
@@ -42,22 +45,35 @@ struct YeelightControl::State: public Object::State
             if (!requestChannel_.read(&command)) break;
             if (command->id_ < 0) command->id_ = nextId_++;
             nextTime = System::now() + timeInterval_;
-            socket_.write(command.toString());
+            try {
+                socket_.write(command.toString());
+            }
+            catch (Exception &ex) {
+                CC_INSPECT(ex);
+                break;
+            }
         } while (!shutdown_.acquireBefore(nextTime));
     }
 
     void runResponseConsumer()
     {
-        for (String line: LineSource{socket_}) {
-            Variant messageValue = jsonParse(line);
-            YEELIGHT_EXPECT(messageValue.is<MetaObject>());
-            MetaObject message = messageValue.to<MetaObject>();
-            if (YeelightResult::recognise(message)) {
-                responseChannel_.write(YeelightResult{message});
+        try {
+            for (String line: LineSource{socket_}) {
+                Variant messageValue = jsonParse(line);
+                YEELIGHT_EXPECT(messageValue.is<MetaObject>());
+                MetaObject message = messageValue.to<MetaObject>();
+                if (YeelightResult::recognise(message)) {
+                    responseChannel_.write(YeelightResult{message});
+                }
+                else if (YeelightUpdate::recognise(message)) {
+                    responseChannel_.write(YeelightUpdate{message});
+                }
             }
-            else if (YeelightUpdate::recognise(message)) {
-                responseChannel_.write(YeelightUpdate{message});
-            }
+        }
+        catch (Exception &ex) {
+            CC_INSPECT(ex);
+            responseChannel_.pushBack(YeelightResponse{});
+            responseChannel_.close();
         }
     }
 

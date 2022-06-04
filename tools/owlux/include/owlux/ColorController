@@ -5,7 +5,7 @@
 
 namespace cc::owlux {
 
-/** \brief Controller for RGB lights
+/** \brief Controller for smart LED lights
   */
 class ColorController: public View
 {
