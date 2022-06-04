@@ -4,6 +4,7 @@
 #include <owlux/YeelightSetBrightness>
 #include <owlux/YeelightSetColorTemp>
 #include <owlux/YeelightSetHueSat>
+#include <owlux/YeelightSave>
 #include <cc/Application>
 #include <cc/ColumnLayout>
 #include <cc/AppBar>
@@ -12,6 +13,7 @@
 #include <cc/Slider>
 #include <cc/Icon>
 #include <cc/NumberCell>
+#include <cc/Button>
 #include <cc/Divider>
 #include <cc/Thread>
 #include <cc/DEBUG>
@@ -36,6 +38,10 @@ struct ColorController::State: public View::State
             })
         );
 
+        const bool needSaveButton =
+            status.supportedMethods().find("set_default") &&
+            status.model() == "color";
+
         addBelow(
             View{}
             .pos(0, appBar_.height())
@@ -46,7 +52,7 @@ struct ColorController::State: public View::State
                 .associate(&powerSwitch_)
                 .value(status_.power())
                 .onUserInput([this]{
-                    control_.requestChannel().pushExclusive(YeelightPower{powerSwitch_.value()});
+                    control_.requestChannel().pushBack(YeelightPower{powerSwitch_.value()});
                     status_.setPower(powerSwitch_.value());
                 })
             )
@@ -60,7 +66,7 @@ struct ColorController::State: public View::State
                 .max(100)
                 .value(status.brightness())
                 .onUserInput([this]{
-                    control_.requestChannel().pushExclusive(
+                    pushPoweredRequest(
                         YeelightSetBrightness{
                             static_cast<int>(brightSlider_.value())
                         }
@@ -77,7 +83,7 @@ struct ColorController::State: public View::State
                 .max(6500)
                 .value(status.colorTemp())
                 .onValueChanged([this]{
-                    control_.requestChannel().pushExclusive(
+                    pushPoweredRequest(
                         YeelightSetColorTemp{
                             static_cast<int>(tempSlider_.value())
                         }
@@ -98,7 +104,7 @@ struct ColorController::State: public View::State
                 .max(359)
                 .value(status.hue())
                 .onValueChanged([this]{
-                    control_.requestChannel().pushExclusive(
+                    pushPoweredRequest(
                         YeelightSetHueSat{
                             static_cast<int>(hueSlider_.value()),
                             static_cast<int>(satSlider_.value())
@@ -116,7 +122,7 @@ struct ColorController::State: public View::State
                 .max(100)
                 .value(status.sat())
                 .onValueChanged([this]{
-                    control_.requestChannel().pushExclusive(
+                    pushPoweredRequest(
                         YeelightSetHueSat{
                             static_cast<int>(hueSlider_.value()),
                             static_cast<int>(satSlider_.value())
@@ -124,6 +130,20 @@ struct ColorController::State: public View::State
                     );
                 })
                 .visible(hueSlider_.visible())
+            )
+            .add(
+                Divider{}
+                .visible(needSaveButton)
+            )
+            .add(
+                Button{}
+                .text("Set as default")
+                .onClicked([this]{
+                    pushPoweredRequest(
+                        YeelightSave{}
+                    );
+                })
+                .visible(needSaveButton)
             )
         );
 
@@ -136,11 +156,24 @@ struct ColorController::State: public View::State
         responseWorker_.wait();
     }
 
+    void pushPoweredRequest(const YeelightCommand &command)
+    {
+        if (!status_.power()) {
+            control_.requestChannel().pushBack(YeelightPower{true});
+            control_.requestChannel().pushBack(command);
+            powerSwitch_.value(true);
+            status_.setPower(true);
+        }
+        else {
+            control_.requestChannel().pushExclusive(command);
+        }
+    }
+
     void responseWorker()
     {
         for (YeelightResponse response: control_.responseChannel())
         {
-            // ferr() << response << nl;
+            ferr() << response << nl;
 
             YeelightUpdate update = response;
             if (update) {

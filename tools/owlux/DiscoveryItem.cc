@@ -1,6 +1,7 @@
 #include <owlux/DiscoveryItem>
 #include <cc/Text>
 #include <cc/Picture>
+#include <cc/Timer>
 #include <cc/DEBUG>
 
 namespace cc::owlux {
@@ -32,10 +33,24 @@ struct DiscoveryItem::State final: public Control::State
             .text([this]{ return status().displayName(); })
             .centerLeft([this]{ return Point{onIcon_.right() + sp(16), height() / 2}; })
         );
+
+        if (initialStatus.refreshInterval() > 0) {
+            expiryTimer_ = Timer{static_cast<double>(2 * initialStatus.refreshInterval() + 60)};
+                // "2 x refresh interval" because first generation Yeelight model "color" seems to have a bug
+                // misreporting its refresh interval as 1 hour, although it refreshes every 2 hours
+            expiryTimer_.start();
+        }
+    }
+
+    void update(const YeelightStatus &status)
+    {
+        this->status().update(status);
+        if (expiryTimer_) expiryTimer_.start();
     }
 
     Picture onIcon_;
     Property<YeelightStatus> status;
+    Timer expiryTimer_;
 };
 
 DiscoveryItem::DiscoveryItem(const YeelightStatus &status):
@@ -56,6 +71,17 @@ DiscoveryItem &DiscoveryItem::status(const YeelightStatus &status)
 {
     me().status(status);
     return *this;
+}
+
+DiscoveryItem &DiscoveryItem::onExpired(Fun<void()> &&f)
+{
+    if (me().expiryTimer_) me().expiryTimer_.onTimeout(move(f));
+    return *this;
+}
+
+void DiscoveryItem::update(const YeelightStatus &status)
+{
+    me().update(status);
 }
 
 DiscoveryItem::State &DiscoveryItem::me()

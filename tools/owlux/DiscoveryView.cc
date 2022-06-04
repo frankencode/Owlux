@@ -50,10 +50,10 @@ struct DiscoveryView::State final: public View::State
 
     void statusUpdate(const YeelightStatus &status)
     {
-        CC_INSPECT(status);
+        // CC_INSPECT(status);
         Locator target;
         if (itemByAddress_.find(status.address(), &target)) {
-            itemByAddress_.at(target).value().status().update(status);
+            itemByAddress_.at(target).value().update(status);
         }
         else {
             DiscoveryItem item;
@@ -61,13 +61,20 @@ struct DiscoveryView::State final: public View::State
             listMenu_.carrier().insertAt(
                 target.index(),
                 DiscoveryItem{status}
-                    .associate(&item)
-                    .onClicked([this,item]{
-                        onSelected_(item.status());
-                    })
+                .associate(&item)
+                .onClicked([this,item]{
+                    onSelected_(item.status());
+                })
             );
-
             itemByAddress_.insert(status.address(), item, &target);
+
+            item.onExpired([this,status]{
+                Locator target;
+                if (itemByAddress_.find(status.address(), &target)) {
+                    listMenu_.carrier().remove(itemByAddress_.at(target).value());
+                    itemByAddress_.removeAt(target);
+                }
+            });
         }
     }
 

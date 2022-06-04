@@ -30,6 +30,7 @@ int main()
                 })
             )
         }
+        .title("Owlux")
         .icon(":/icons/app.webp")
         .run();
 }
