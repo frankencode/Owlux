@@ -3,22 +3,32 @@
 #include <owlux/YeelightDiscovery>
 #include <cc/Application>
 #include <cc/Thread>
+#include <cc/Semaphore>
 #include <cc/AppBar>
 #include <cc/ListMenu>
+#include <cc/FloatingActionButton>
 #include <cc/DEBUG>
 
 namespace cc::owlux {
 
 struct DiscoveryView::State final: public View::State
 {
+    const int MinScanInterval = 3; ///< Number of seconds until another discovery message can be send out
+
     State()
     {
-        discoveryThread_ = Thread{[this]{
-            for (YeelightStatus status: YeelightDiscovery{500, 1}) {
-                Application{}.postEvent([this, status]{
-                    statusUpdate(status);
-                });
+        scanningThread_ = Thread{[this]{
+            while (!scannerShutdown_.tryAcquire()) {
+                for (YeelightStatus status: YeelightDiscovery{500, 1}) {
+                    Application{}.postEvent([this, status]{
+                        statusUpdate(status);
+                    });
+                }
+                scanningRequest_.acquire();
             }
+        }};
+
+        discoveryThread_ = Thread{[this]{
             for (YeelightStatus status: listener_) {
                 Application{}.postEvent([this, status]{
                     statusUpdate(status);
@@ -30,6 +40,9 @@ struct DiscoveryView::State final: public View::State
             AppBar{}
             .associate(&appBar_)
             .title("Lights")
+            .onNavigate([this]{
+                CC_DEBUG;
+            })
         );
 
         addBelow(
@@ -39,6 +52,22 @@ struct DiscoveryView::State final: public View::State
             .size([this]{ return size() - Size{0, appBar_.height()}; })
         );
 
+        add(
+            FloatingActionButton{"SCAN"}
+            .icon(Ideographic::Reload)
+            .onClicked([this]{
+                double nowTime = System::now();
+                if (nowTime - previousScanTime_ > MinScanInterval) {
+                    itemByAddress_.deplete();
+                    listMenu_.carrier().deplete();
+                    scanningRequest_.release();
+                    previousScanTime_ = nowTime;
+                }
+            })
+            .bottomCenter([this]{ return bottomCenter() - Point{0, sp(16)}; })
+        );
+
+        scanningThread_.start();
         discoveryThread_.start();
     }
 
@@ -46,6 +75,10 @@ struct DiscoveryView::State final: public View::State
     {
         listener_.shutdown();
         discoveryThread_.wait();
+
+        scannerShutdown_.release();
+        scanningRequest_.release();
+        scanningThread_.wait();
     }
 
     void statusUpdate(const YeelightStatus &status)
@@ -56,30 +89,33 @@ struct DiscoveryView::State final: public View::State
             itemByAddress_.at(target).value().update(status);
         }
         else {
-            DiscoveryItem item;
+            DiscoveryItem item{status};
 
-            listMenu_.carrier().insertAt(
-                target.index(),
-                DiscoveryItem{status}
-                .associate(&item)
-                .onClicked([this,item]{
-                    onSelected_(item.status());
-                })
-            );
-            itemByAddress_.insert(status.address(), item, &target);
-
-            item.onExpired([this,status]{
+            item
+            .onExpired([this,status]{
                 Locator target;
                 if (itemByAddress_.find(status.address(), &target)) {
                     listMenu_.carrier().remove(itemByAddress_.at(target).value());
                     itemByAddress_.removeAt(target);
                 }
+            })
+            .onClicked([this, status]{
+                onSelected_(status);
             });
+
+            itemByAddress_.insert(status.address(), item, &target);
+            listMenu_.carrier().insertAt(target.index(), item);
         }
     }
 
     YeelightDiscovery listener_;
     Thread discoveryThread_;
+
+    double previousScanTime_ { 0 };
+    Semaphore<int> scannerShutdown_;
+    Semaphore<int> scanningRequest_;
+    Thread scanningThread_;
+
     Map<SocketAddress, DiscoveryItem> itemByAddress_;
 
     AppBar appBar_;

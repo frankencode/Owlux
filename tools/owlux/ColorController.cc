@@ -183,7 +183,7 @@ struct ColorController::State: public View::State
                 break;
             }
 
-            ferr() << response << nl;
+            // ferr() << response << nl;
 
             YeelightUpdate update = response;
             if (update) {
