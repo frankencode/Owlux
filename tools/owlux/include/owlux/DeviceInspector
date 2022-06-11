@@ -1,0 +1,30 @@
+#pragma once
+
+#include <owlux/YeelightStatus>
+#include <cc/View>
+
+namespace cc { class StackView; }
+
+namespace cc::owlux {
+
+/** \brief Show low-level device information
+  */
+class DeviceInspector final: public View
+{
+public:
+    /** Create a null information view
+      */
+    DeviceInspector() = default;
+
+    /** Create a new information view for \a status
+      */
+    explicit DeviceInspector(const YeelightStatus &status, const StackView &stack);
+
+private:
+    struct State;
+
+    State &me();
+    const State &me() const;
+};
+
+} // namespace cc::owlux

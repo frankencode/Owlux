@@ -3,11 +3,13 @@
 #include <owlux/YeelightStatus>
 #include <cc/View>
 
+namespace cc { class StackView; }
+
 namespace cc::owlux {
 
 /** \brief Controller for smart LED lights
   */
-class ColorController: public View
+class ColorController final: public View
 {
 public:
     /** Create a null color controller
@@ -16,11 +18,11 @@ public:
 
     /** Create a new contoller for \a light
       */
-    ColorController(const YeelightStatus &status);
+    ColorController(const YeelightStatus &status, const StackView &stack);
 
+    /** Get a weak reference in \a self
+      */
     ColorController &associate(Out<ColorController> self);
-
-    ColorController &onDismissed(Fun<void()> &&f);
 
 private:
     struct State;

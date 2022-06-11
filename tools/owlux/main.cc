@@ -22,10 +22,7 @@ int main()
                 .associate(&discovery)
                 .onSelected([=](const YeelightStatus &status) mutable {
                     stack.push(
-                        ColorController{status}
-                        .onDismissed([=]() mutable {
-                            stack.pop();
-                        })
+                        ColorController{status, stack}
                     );
                 })
             )

@@ -1,4 +1,5 @@
 #include <owlux/ColorController>
+#include <owlux/DeviceInspector>
 #include <owlux/YeelightControl>
 #include <owlux/YeelightPower>
 #include <owlux/YeelightSetBrightness>
@@ -7,11 +8,11 @@
 #include <owlux/YeelightSave>
 #include <cc/Application>
 #include <cc/ColumnLayout>
+#include <cc/StackView>
 #include <cc/AppBar>
 #include <cc/Text>
 #include <cc/Switch>
 #include <cc/Slider>
-#include <cc/Icon>
 #include <cc/NumberCell>
 #include <cc/Button>
 #include <cc/Divider>
@@ -20,9 +21,10 @@
 
 namespace cc::owlux {
 
-struct ColorController::State: public View::State
+struct ColorController::State final: public View::State
 {
-    State(const YeelightStatus &status):
+    State(const YeelightStatus &status, const StackView &stack):
+        stack_{stack},
         control_{status.address()},
         status_{status},
         responseWorker_{[this]{ responseWorker(); }}
@@ -36,8 +38,17 @@ struct ColorController::State: public View::State
                     Format{"Light \"%%\""}.arg(status_.name()) :
                     Format{"Light %%"}.arg(status_.id());
             })
+           .addAction(
+                Action{}
+                .icon(Ideographic::Information)
+                .onTriggered([this, status]{
+                    stack_.push(
+                        DeviceInspector{status, stack_}
+                    );
+                })
+            )
             .onDismissed([this]{
-                if (dismissed_) dismissed_();
+                stack_.pop();
             })
         );
 
@@ -63,7 +74,7 @@ struct ColorController::State: public View::State
             .add(
                 Slider{}
                 .associate(&brightSlider_)
-                .leading(Icon{Ideographic::Brightness6})
+                .leading(Ideographic::Brightness6)
                 .trailing(NumberCell{})
                 .min(1)
                 .max(100)
@@ -80,7 +91,7 @@ struct ColorController::State: public View::State
             .add(
                 Slider{}
                 .associate(&tempSlider_)
-                .leading(Icon{Ideographic::Thermometer})
+                .leading(Ideographic::Thermometer)
                 .trailing(NumberCell{})
                 .min(1700)
                 .max(6500)
@@ -139,8 +150,7 @@ struct ColorController::State: public View::State
                 .visible(needSaveButton)
             )
             .add(
-                Button{}
-                .text("Set as default")
+                Button{"SET DEFAULT"}
                 .onClicked([this]{
                     pushPoweredRequest(
                         YeelightSave{}
@@ -178,7 +188,7 @@ struct ColorController::State: public View::State
         {
             if (!response) {
                 Application{}.postEvent([this]{
-                    if (dismissed_) dismissed_();
+                    stack_.pop();
                 });
                 break;
             }
@@ -209,8 +219,8 @@ struct ColorController::State: public View::State
         }
     }
 
+    StackView stack_;
     AppBar appBar_;
-    Fun<void()> dismissed_;
     Switch powerSwitch_;
     Slider brightSlider_;
     Slider tempSlider_;
@@ -221,19 +231,13 @@ struct ColorController::State: public View::State
     Thread responseWorker_;
 };
 
-ColorController::ColorController(const YeelightStatus &status):
-    View{new State{status}}
+ColorController::ColorController(const YeelightStatus &status, const StackView &stack):
+    View{new State{status, stack}}
 {}
 
 ColorController &ColorController::associate(Out<ColorController> self)
 {
     return View::associate<ColorController>(self);
-}
-
-ColorController &ColorController::onDismissed(Fun<void()> &&f)
-{
-    me().dismissed_ = move(f);
-    return *this;
 }
 
 ColorController::State &ColorController::me()

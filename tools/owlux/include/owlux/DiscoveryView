@@ -22,6 +22,8 @@ public:
       */
     DiscoveryView &associate(Out<DiscoveryView> self);
 
+    /** Setup function to call when a devce is selected by the user
+      */
     DiscoveryView &onSelected(Fun<void(const YeelightStatus &status)> &&f);
 
 private:

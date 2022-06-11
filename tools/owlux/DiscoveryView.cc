@@ -6,7 +6,7 @@
 #include <cc/Semaphore>
 #include <cc/AppBar>
 #include <cc/ListMenu>
-#include <cc/FloatingActionButton>
+#include <cc/FloatingButton>
 #include <cc/DEBUG>
 
 namespace cc::owlux {
@@ -53,8 +53,7 @@ struct DiscoveryView::State final: public View::State
         );
 
         add(
-            FloatingActionButton{"SCAN"}
-            .icon(Ideographic::Reload)
+            FloatingButton{"SCAN", Ideographic::Reload}
             .onClicked([this]{
                 double nowTime = System::now();
                 if (nowTime - previousScanTime_ > MinScanInterval) {
