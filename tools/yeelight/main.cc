@@ -11,6 +11,8 @@
 #include <owlux/YeelightStopColorFlow>
 #include <owlux/YeelightEstablishColorFlow>
 #include <owlux/YeelightEstablishAutoDelayOff>
+#include <owlux/YeelightStartOffTimer>
+#include <owlux/YeelightStopOffTimer>
 #include <owlux/setup/YeelightSecretHello>
 #include <owlux/setup/YeelightSecretStatus>
 #include <owlux/setup/YeelightSecretSetup>
@@ -73,7 +75,6 @@ int main(int argc, char *argv[])
         { "ping", false },
         { "list", false },
         { "listen", false },
-        // TODO: watch + documentation for maxRetry provided as zero
         { "delay", 0 },
         { "on", false },
         { "off", false },
@@ -86,7 +87,9 @@ int main(int argc, char *argv[])
         { "save", false },
         { "flow", "" },
         { "alarm", false },
-        { "stop", false }
+        { "stop", false },
+        { "sleep", -1 },
+        { "sleep-stop", false }
     };
 
     List<SocketAddress> address;
@@ -355,7 +358,26 @@ int main(int argc, char *argv[])
         else if (options("stop")) {
             YeelightStopColorFlow command;
             YEELIGHT_EXPECT(targets.count() >= 1);
-            CC_INSPECT(command.toString());
+            for (const SocketAddress &target: targets) {
+                YeelightResult result = YeelightControl{target}.execute(command);
+                fout() << result << nl;
+            }
+        }
+        else if (options("sleep").to<long>() >= 0) {
+            CC_INSPECT(options("sleep").to<long>());
+            double nowTime = System::now();
+            double offTime = nowTime + 60 * options("sleep").to<long>();
+            YeelightStartOffTimer command { offTime };
+            fout() << "Going to sleep at " << Date{offTime}.toString() << nl;
+            YEELIGHT_EXPECT(targets.count() >= 1);
+            for (const SocketAddress &target: targets) {
+                YeelightResult result = YeelightControl{target}.execute(command);
+                fout() << result << nl;
+            }
+        }
+        else if (options("sleep-stop")) {
+            YeelightStopOffTimer command;
+            YEELIGHT_EXPECT(targets.count() >= 1);
             for (const SocketAddress &target: targets) {
                 YeelightResult result = YeelightControl{target}.execute(command);
                 fout() << result << nl;
@@ -399,6 +421,8 @@ int main(int argc, char *argv[])
             "  -save           Save current light settings as default\n"
             "  -flow=<E>       Start color flow expression E\n"
             "  -stop           Stop color flow\n"
+            "  -sleep=<N>      Switch off light in <N> minutes\n"
+            "  -sleep-stop     Stop sleep timer\n"
             "\n"
         );
     }

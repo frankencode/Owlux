@@ -1,0 +1,16 @@
+#pragma once
+
+#include <owlux/YeelightCommand>
+
+namespace cc::owlux {
+
+class YeelightStopOffTimer final: public YeelightCommand
+{
+public:
+    explicit YeelightStopOffTimer();
+
+private:
+    struct State;
+};
+
+} // namespace cc::owlux

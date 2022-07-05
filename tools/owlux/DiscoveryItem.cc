@@ -6,9 +6,9 @@
 
 namespace cc::owlux {
 
-struct DiscoveryItem::State final: public Control::State
+struct DiscoveryItem::State final: public Organizer::State
 {
-    State(const YeelightStatus &initialStatus):
+    explicit State(const YeelightStatus &initialStatus):
         status{initialStatus}
     {
         paper([this]{
@@ -16,14 +16,14 @@ struct DiscoveryItem::State final: public Control::State
         });
 
         add(
-            Picture{Ideographic::LightbulbOnOutline}
+            Picture{Icon::LightbulbOnOutline}
             .associate(&onIcon_)
             .centerLeft([this]{ return Point{sp(16), height() / 2}; })
             .visible([this]{ return status().power(); })
         );
 
         add(
-            Picture{Ideographic::LightbulbOutline}
+            Picture{Icon::LightbulbOutline}
             .centerLeft([this]{ return Point{sp(16), height() / 2}; })
             .visible([this]{ return !status().power(); })
         );
@@ -32,6 +32,24 @@ struct DiscoveryItem::State final: public Control::State
             Text{}
             .text([this]{ return status().displayName(); })
             .centerLeft([this]{ return Point{onIcon_.right() + sp(16), height() / 2}; })
+        );
+
+        add(
+            Control{}
+            .associate(&settingsButton_)
+            .paper([this]{
+                return settingsButton_.pressed() ? theme().itemHighlightColor() : Color{};
+            })
+            .size([this]{ return Size{height(), height()}; })
+            .visible([this]{ return status().power(); })
+            .add(
+                // Picture{Icon::Brightness6}
+                Picture{Icon::Cogs}
+                .centerInParent()
+            )
+            .topRight([this]{
+                return Point{width(), 0};
+            })
         );
 
         if (initialStatus.refreshInterval() > 0) {
@@ -49,12 +67,13 @@ struct DiscoveryItem::State final: public Control::State
     }
 
     Picture onIcon_;
+    Control settingsButton_;
     Property<YeelightStatus> status;
     Timer expiryTimer_;
 };
 
 DiscoveryItem::DiscoveryItem(const YeelightStatus &status):
-    Control{new State{status}}
+    Organizer{new State{status}}
 {}
 
 DiscoveryItem &DiscoveryItem::associate(Out<DiscoveryItem> self)
@@ -70,6 +89,12 @@ YeelightStatus DiscoveryItem::status() const
 DiscoveryItem &DiscoveryItem::status(const YeelightStatus &status)
 {
     me().status(status);
+    return *this;
+}
+
+DiscoveryItem &DiscoveryItem::onSettingsRequested(Fun<void()> &&f)
+{
+    me().settingsButton_.onClicked([f]{ f(); });
     return *this;
 }
 

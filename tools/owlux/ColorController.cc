@@ -6,6 +6,7 @@
 #include <owlux/YeelightSetColorTemp>
 #include <owlux/YeelightSetHueSat>
 #include <owlux/YeelightSave>
+#include <owlux/YeelightSetName>
 #include <cc/Application>
 #include <cc/ColumnLayout>
 #include <cc/StackView>
@@ -14,8 +15,10 @@
 #include <cc/Switch>
 #include <cc/Slider>
 #include <cc/NumberCell>
-#include <cc/Button>
+#include <cc/ElevatedButton>
 #include <cc/Divider>
+#include <cc/CustomDialog>
+#include <cc/LineEdit>
 #include <cc/Thread>
 #include <cc/DEBUG>
 
@@ -35,16 +38,55 @@ struct ColorController::State final: public View::State
             .title([this]{
                 return
                     status_.name() != "" ?
-                    Format{"Light \"%%\""}.arg(status_.name()) :
-                    Format{"Light %%"}.arg(status_.id());
+                    Format{"Settings for \"%%\""}.arg(status_.name()) :
+                    Format{"Settings for %%"}.arg(status_.id());
             })
-           .addAction(
+            .addAction(
                 Action{}
-                .icon(Ideographic::Information)
+                .icon(Icon::Information)
                 .onTriggered([this, status]{
                     stack_.push(
                         DeviceInspector{status, stack_}
                     );
+                })
+            )
+            .addAction(
+                Action{}
+                .icon(Icon::Pencil)
+                .onTriggered([this, status]{
+                    CustomDialog dialog;
+                    LineEdit edit;
+
+                    CustomDialog{}
+                    .associate(&dialog)
+                    .addContent(
+                        LineEdit{}
+                        .associate(&edit)
+                        .title("Name")
+                        .text(status.name())
+                        .onAccepted([=,this]() mutable {
+                            setName(edit.text());
+                            dialog.close();
+                        })
+                        .focus(true)
+                    )
+                    .addAction(
+                        Action{"Cancel"}
+                        ([=]() mutable {
+                            CC_DEBUG << "Cancel";
+                            dialog.close();
+                        })
+                    )
+                    .addAction(
+                        Action{"OK"}
+                        ([=,this]() mutable {
+                            if (status.name() != edit.text()) {
+                                setName(edit.text());
+                            }
+                            dialog.close();
+                        })
+                    )
+                    .open();
                 })
             )
             .onDismissed([this]{
@@ -61,6 +103,7 @@ struct ColorController::State final: public View::State
             .pos(0, appBar_.height())
             .size([this]{ return size() - Size{0, appBar_.height()}; })
             .layout(ColumnLayout{})
+            #if 0
             .add(
                 Switch{"Power"}
                 .associate(&powerSwitch_)
@@ -71,10 +114,11 @@ struct ColorController::State final: public View::State
                 })
             )
             .add(Divider{})
+            #endif
             .add(
                 Slider{}
                 .associate(&brightSlider_)
-                .leading(Ideographic::Brightness6)
+                .leading(Icon::Brightness6)
                 .trailing(NumberCell{})
                 .min(1)
                 .max(100)
@@ -91,7 +135,7 @@ struct ColorController::State final: public View::State
             .add(
                 Slider{}
                 .associate(&tempSlider_)
-                .leading(Ideographic::Thermometer)
+                .leading(Icon::Thermometer)
                 .trailing(NumberCell{})
                 .min(1700)
                 .max(6500)
@@ -145,20 +189,22 @@ struct ColorController::State final: public View::State
                 })
                 .visible(hueSlider_.visible())
             )
-            .add(
-                Divider{}
-                .visible(needSaveButton)
-            )
-            .add(
-                Button{"SET DEFAULT"}
+        );
+
+        if (needSaveButton) {
+            add(
+                ElevatedButton{"Save as default", Icon::Memory}
                 .onClicked([this]{
                     pushPoweredRequest(
                         YeelightSave{}
                     );
                 })
+                .bottomCenter([this]{
+                    return Point{width()/2, height() - sp(16)};
+                })
                 .visible(needSaveButton)
-            )
-        );
+            );
+        }
 
         responseWorker_.start();
     }
@@ -167,6 +213,12 @@ struct ColorController::State final: public View::State
     {
         control_.responseChannel().shutdown();
         responseWorker_.wait();
+    }
+
+    void setName(const String &newName)
+    {
+        control_.requestChannel().pushBack(YeelightSetName{newName});
+        status_.setName(newName);
     }
 
     void pushPoweredRequest(const YeelightCommand &command)

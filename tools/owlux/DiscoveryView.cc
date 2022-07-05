@@ -1,6 +1,8 @@
 #include <owlux/DiscoveryView>
 #include <owlux/DiscoveryItem>
 #include <owlux/YeelightDiscovery>
+#include <owlux/YeelightControl>
+#include <owlux/YeelightPower>
 #include <cc/Application>
 #include <cc/Thread>
 #include <cc/Semaphore>
@@ -53,16 +55,8 @@ struct DiscoveryView::State final: public View::State
         );
 
         add(
-            FloatingButton{"SCAN", Ideographic::Reload}
-            .onClicked([this]{
-                double nowTime = System::now();
-                if (nowTime - previousScanTime_ > MinScanInterval) {
-                    itemByAddress_.deplete();
-                    listMenu_.carrier().deplete();
-                    scanningRequest_.release();
-                    previousScanTime_ = nowTime;
-                }
-            })
+            FloatingButton{"SCAN", Icon::Reload}
+            .onClicked([this]{ scan(); })
             .bottomCenter([this]{ return bottomCenter() - Point{0, sp(16)}; })
         );
 
@@ -80,7 +74,20 @@ struct DiscoveryView::State final: public View::State
         scanningThread_.wait();
     }
 
-    void statusUpdate(const YeelightStatus &status)
+    void scan()
+    {
+        double nowTime = System::now();
+        if (nowTime - previousScanTime_ > MinScanInterval) {
+            itemByAddress_.deplete();
+            listMenu_.carrier().deplete();
+            scanningRequest_.release();
+            previousScanTime_ = nowTime;
+        }
+    }
+
+    /** \todo improve error handling for power on/off
+      */
+    void statusUpdate(YeelightStatus status)
     {
         // CC_INSPECT(status);
         Locator target;
@@ -98,8 +105,21 @@ struct DiscoveryView::State final: public View::State
                     itemByAddress_.removeAt(target);
                 }
             })
-            .onClicked([this, status]{
+            .onSettingsRequested([this, status]{
                 onSelected_(status);
+            })
+            .onClicked([this, status]() mutable {
+                try {
+                    bool on = !status.power();
+                    YeelightControl control{status.address()};
+                    control.requestChannel().pushBack(
+                        YeelightPower{on, YeelightEffect::Smooth}
+                    );
+                    if (!control.waitEstablished(1000)) scan();
+                    status.setPower(on);
+                }
+                catch(...)
+                {}
             });
 
             itemByAddress_.insert(status.address(), item, &target);

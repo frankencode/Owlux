@@ -22,6 +22,7 @@ public:
 
     long id() const;
     String name() const;
+    void setName(const String &newValue);
 
     String displayName() const;
 

@@ -17,6 +17,8 @@ public:
 
     explicit YeelightControl(const SocketAddress &address);
 
+    bool waitEstablished(int timeout = -1);
+
     YeelightResult execute(const YeelightCommand &command);
 
     Channel<YeelightCommand> requestChannel();

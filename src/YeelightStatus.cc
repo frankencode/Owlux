@@ -264,6 +264,11 @@ String YeelightStatus::name() const
     return me().name();
 }
 
+void YeelightStatus::setName(const String &newValue)
+{
+    me().name(newValue);
+}
+
 String YeelightStatus::displayName() const
 {
     return me().displayName();

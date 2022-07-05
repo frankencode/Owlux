@@ -39,25 +39,28 @@ struct YeelightControl::State: public Object::State
 
     void runCommandFeed()
     {
-        double nextTime = System::now();
-        do {
-            YeelightCommand command;
-            if (!requestChannel_.read(&command)) break;
-            if (command->id_ < 0) command->id_ = nextId_++;
-            nextTime = System::now() + timeInterval_;
-            try {
+        try {
+            if (!socket_.waitEstablished(1000)) return;
+
+            double nextTime = System::now();
+            do {
+                YeelightCommand command;
+                if (!requestChannel_.read(&command)) break;
+                if (command->id_ < 0) command->id_ = nextId_++;
+                nextTime = System::now() + timeInterval_;
                 socket_.write(command.toString());
-            }
-            catch (Exception &ex) {
-                CC_INSPECT(ex);
-                break;
-            }
-        } while (!shutdown_.acquireBefore(nextTime));
+            } while (!shutdown_.acquireBefore(nextTime));
+        }
+        catch (Exception &ex) {
+            CC_INSPECT(ex);
+        }
     }
 
     void runResponseConsumer()
     {
         try {
+            if (!socket_.waitEstablished(1000)) return;
+
             for (String line: LineSource{socket_}) {
                 Variant messageValue = jsonParse(line);
                 YEELIGHT_EXPECT(messageValue.is<MetaObject>());
@@ -79,6 +82,7 @@ struct YeelightControl::State: public Object::State
 
     YeelightResult execute(const YeelightCommand &command)
     {
+        if (command.id() < 0) YeelightCommand{command}->id_ = nextId_++;
         requestChannel_.write(command);
         return waitForResult(command.id());
     }
@@ -101,13 +105,18 @@ struct YeelightControl::State: public Object::State
     Thread commandFeed_;
     Thread responseConsumer_;
     Semaphore<int> shutdown_;
-    long nextId_ { 1 };
+    std::atomic<int> nextId_ { 1 };
     double timeInterval_ { 1 };
 };
 
 YeelightControl::YeelightControl(const SocketAddress &address):
     Object{new State{address}}
 {}
+
+bool YeelightControl::waitEstablished(int timeout)
+{
+    return me().socket_.waitEstablished(timeout);
+}
 
 YeelightResult YeelightControl::execute(const YeelightCommand &command)
 {

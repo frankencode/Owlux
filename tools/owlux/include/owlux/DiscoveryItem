@@ -1,13 +1,13 @@
 #pragma once
 
 #include <owlux/YeelightStatus>
-#include <cc/Control>
+#include <cc/Organizer>
 
 namespace cc::owlux {
 
 /** \brief Display status of a Yeelight light
   */
-class DiscoveryItem final: public Control
+class DiscoveryItem final: public Organizer
 {
 public:
     /** Create a null discovery item
@@ -29,6 +29,8 @@ public:
     /** Set a new light status
       */
     DiscoveryItem &status(const YeelightStatus &status);
+
+    DiscoveryItem &onSettingsRequested(Fun<void()> &&f);
 
     /** Setup function \a f to be called if this item has been expired
       */
