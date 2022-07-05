@@ -1,5 +1,5 @@
 #include <owlux/DiscoveryView>
-#include <owlux/ColorController>
+#include <owlux/LightSettings>
 #include <cc/StackView>
 #include <cc/Window>
 #include <cc/Resource>
@@ -15,14 +15,14 @@ int main()
 
     return
         Window{
-            StackView{sp(480), sp(800)}
+            StackView{sp(340), sp(640)}
             .associate(&stack)
             .push(
                 DiscoveryView{}
                 .associate(&discovery)
                 .onSelected([=](const YeelightStatus &status) mutable {
                     stack.push(
-                        ColorController{status, stack}
+                        LightSettings{status, stack}
                     );
                 })
             )

@@ -7,22 +7,22 @@ namespace cc { class StackView; }
 
 namespace cc::owlux {
 
-/** \brief Controller for smart LED lights
+/** \brief Settings for the smart lights
   */
-class ColorController final: public View
+class LightSettings final: public View
 {
 public:
     /** Create a null color controller
       */
-    ColorController() = default;
+    LightSettings() = default;
 
     /** Create a new contoller for \a light
       */
-    ColorController(const YeelightStatus &status, const StackView &stack);
+    LightSettings(const YeelightStatus &status, const StackView &stack);
 
     /** Get a weak reference in \a self
       */
-    ColorController &associate(Out<ColorController> self);
+    LightSettings &associate(Out<LightSettings> self);
 
 private:
     struct State;

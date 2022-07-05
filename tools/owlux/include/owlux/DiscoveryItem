@@ -1,13 +1,13 @@
 #pragma once
 
 #include <owlux/YeelightStatus>
-#include <cc/Organizer>
+#include <cc/Control>
 
 namespace cc::owlux {
 
 /** \brief Display status of a Yeelight light
   */
-class DiscoveryItem final: public Organizer
+class DiscoveryItem final: public Control
 {
 public:
     /** Create a null discovery item

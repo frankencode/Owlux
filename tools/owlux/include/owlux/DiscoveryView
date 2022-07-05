@@ -7,9 +7,12 @@ namespace cc::owlux {
 
 using namespace cc;
 
-/** \brief Discover and list devices
+/** \brief Show a list of automatically discovered smart lights
   *
-  * The DiscoveryView scans the network once and keep listening for device announcements.
+  * The DiscoveryView actively scans the network once and thereafter keeps listening for device announcements.
+  * It allows to switch lights on and off.
+  *
+  * \todo use the Icon::LightSwitch for the application bar navigation icon?!
   */
 class DiscoveryView final: public View
 {

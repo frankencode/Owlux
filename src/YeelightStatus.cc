@@ -238,6 +238,9 @@ public:
     Property<Color> color;
     Property<int> hue { -1 };
     Property<int> sat { -1 };
+    Property<bool> sleepTimer;
+    Property<int> sleepHour;
+    Property<int> sleepMinutes;
 };
 
 YeelightStatus::YeelightStatus(const SocketAddress &address, const String &message):
@@ -332,6 +335,32 @@ int YeelightStatus::sat() const
 String YeelightStatus::operator()(const String &key) const
 {
     return me().keyValueMap_(key);
+}
+
+bool YeelightStatus::sleepTimer() const
+{
+    return me().sleepTimer();
+}
+
+void YeelightStatus::setSleepTimer(bool on)
+{
+    me().sleepTimer(on);
+}
+
+int YeelightStatus::sleepHour() const
+{
+    return me().sleepHour();
+}
+
+int YeelightStatus::sleepMinutes() const
+{
+    return me().sleepMinutes();
+}
+
+void YeelightStatus::setSleepTime(int hour, int minutes)
+{
+    me().sleepHour(hour);
+    me().sleepMinutes(minutes);
 }
 
 String YeelightStatus::toString() const

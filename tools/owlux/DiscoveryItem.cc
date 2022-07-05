@@ -6,7 +6,7 @@
 
 namespace cc::owlux {
 
-struct DiscoveryItem::State final: public Organizer::State
+struct DiscoveryItem::State final: public Control::State
 {
     explicit State(const YeelightStatus &initialStatus):
         status{initialStatus}
@@ -16,14 +16,16 @@ struct DiscoveryItem::State final: public Organizer::State
         });
 
         add(
-            Picture{Icon::LightbulbOnOutline}
+            Picture{Icon::LightbulbOn, sp(28)}
             .associate(&onIcon_)
-            .centerLeft([this]{ return Point{sp(16), height() / 2}; })
+            .color([this]{ return theme().primaryColor(); })
+            .centerLeft([this]{ return Point{sp(16), height() / 2} - Point{sp(2), sp(4)}; })
             .visible([this]{ return status().power(); })
         );
 
         add(
-            Picture{Icon::LightbulbOutline}
+            Picture{Icon::Lightbulb}
+            .color([this]{ return theme().inactiveTextColor(); })
             .centerLeft([this]{ return Point{sp(16), height() / 2}; })
             .visible([this]{ return !status().power(); })
         );
@@ -73,7 +75,7 @@ struct DiscoveryItem::State final: public Organizer::State
 };
 
 DiscoveryItem::DiscoveryItem(const YeelightStatus &status):
-    Organizer{new State{status}}
+    Control{new State{status}}
 {}
 
 DiscoveryItem &DiscoveryItem::associate(Out<DiscoveryItem> self)

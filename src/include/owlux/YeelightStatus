@@ -45,6 +45,13 @@ public:
 
     String operator()(const String &key) const;
 
+    bool sleepTimer() const;
+    void setSleepTimer(bool on);
+
+    int sleepHour() const;
+    int sleepMinutes() const;
+    void setSleepTime(int hour, int minutes);
+
     String toString() const;
 
     void update(const YeelightUpdate &update);

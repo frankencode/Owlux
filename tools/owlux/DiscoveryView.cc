@@ -112,9 +112,7 @@ struct DiscoveryView::State final: public View::State
                 try {
                     bool on = !status.power();
                     YeelightControl control{status.address()};
-                    control.requestChannel().pushBack(
-                        YeelightPower{on, YeelightEffect::Smooth}
-                    );
+                    control.requestChannel().pushBack(YeelightPower{on});
                     if (!control.waitEstablished(1000)) scan();
                     status.setPower(on);
                 }

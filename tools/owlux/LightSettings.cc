@@ -1,4 +1,4 @@
-#include <owlux/ColorController>
+#include <owlux/LightSettings>
 #include <owlux/DeviceInspector>
 #include <owlux/YeelightControl>
 #include <owlux/YeelightPower>
@@ -16,15 +16,18 @@
 #include <cc/Slider>
 #include <cc/NumberCell>
 #include <cc/ElevatedButton>
+#include <cc/TonalButton>
+#include <cc/TextButton>
 #include <cc/Divider>
 #include <cc/CustomDialog>
 #include <cc/LineEdit>
+#include <cc/TimePicker>
 #include <cc/Thread>
 #include <cc/DEBUG>
 
 namespace cc::owlux {
 
-struct ColorController::State final: public View::State
+struct LightSettings::State final: public View::State
 {
     State(const YeelightStatus &status, const StackView &stack):
         stack_{stack},
@@ -38,8 +41,8 @@ struct ColorController::State final: public View::State
             .title([this]{
                 return
                     status_.name() != "" ?
-                    Format{"Settings for \"%%\""}.arg(status_.name()) :
-                    Format{"Settings for %%"}.arg(status_.id());
+                    Format{"\"%%\""}.arg(status_.name()) :
+                    Format{"Light %%"}.arg(status_.id());
             })
             .addAction(
                 Action{}
@@ -97,6 +100,8 @@ struct ColorController::State final: public View::State
         const bool needSaveButton =
             status.supportedMethods().find("set_default") &&
             status.model() == "color";
+
+        TonalButton stopSleepTimer;
 
         addBelow(
             View{}
@@ -156,7 +161,7 @@ struct ColorController::State final: public View::State
             .add(
                 Slider{}
                 .associate(&hueSlider_)
-                .leading(Text{"Hue"})
+                .leading(Icon::Palette)
                 .trailing(NumberCell{})
                 .min(0)
                 .max(359)
@@ -174,7 +179,7 @@ struct ColorController::State final: public View::State
             .add(
                 Slider{}
                 .associate(&satSlider_)
-                .leading(Text{"Sat"})
+                .leading(Icon::ContrastBox)
                 .trailing(NumberCell{})
                 .min(0)
                 .max(100)
@@ -188,6 +193,58 @@ struct ColorController::State final: public View::State
                     );
                 })
                 .visible(hueSlider_.visible())
+            )
+            .add(
+                Divider{}
+                .visible(hueSlider_.visible() || satSlider_.visible())
+            )
+            .add(
+                TonalButton{"Start sleep timer", Icon::Sleep}
+                .autoExpand(false)
+                .onTriggered([this] {
+                    TimePicker picker;
+
+                    TimePicker{}
+                    .associate(&picker)
+                    .onAccepted([=,this] {
+                        status_.setSleepTime(picker.hour(), picker.minute());
+                        status_.setSleepTimer(true);
+                    })
+                    .open();
+                })
+                .visible([this]{
+                    return
+                        status_.supportedMethods().find("cron_add") &&
+                        !status_.sleepTimer();
+                })
+            )
+            .add(
+                TonalButton{"Stop sleep timer", Icon::SleepOff}
+                .associate(&stopSleepTimer)
+                .autoExpand(false)
+                .onTriggered([this]{
+                    status_.setSleepTimer(false);
+                })
+                .visible([this]{
+                    return
+                        status_.supportedMethods().find("cron_del") &&
+                        status_.sleepTimer();
+                })
+                .add(
+                    TextButton{Icon::ClockEnd}
+                    .text([this]{
+                        return
+                            Format{"%%:%%"}
+                            .arg(dec(status_.sleepHour(), 2))
+                            .arg(dec(status_.sleepMinutes(), 2));
+                    })
+                    .centerLeft([=]{
+                        return Point{ stopSleepTimer.width() + sp(12), stopSleepTimer.height() / 2 };
+                    })
+                    .visible([this]{
+                        return status_.sleepTimer();
+                    })
+                )
             )
         );
 
@@ -283,21 +340,21 @@ struct ColorController::State final: public View::State
     Thread responseWorker_;
 };
 
-ColorController::ColorController(const YeelightStatus &status, const StackView &stack):
+LightSettings::LightSettings(const YeelightStatus &status, const StackView &stack):
     View{new State{status, stack}}
 {}
 
-ColorController &ColorController::associate(Out<ColorController> self)
+LightSettings &LightSettings::associate(Out<LightSettings> self)
 {
-    return View::associate<ColorController>(self);
+    return View::associate<LightSettings>(self);
 }
 
-ColorController::State &ColorController::me()
+LightSettings::State &LightSettings::me()
 {
     return get<State>();
 }
 
-const ColorController::State &ColorController::me() const
+const LightSettings::State &LightSettings::me() const
 {
     return get<State>();
 }
