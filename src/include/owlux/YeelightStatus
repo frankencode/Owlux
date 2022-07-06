@@ -42,6 +42,7 @@ public:
 
     int hue() const;
     int sat() const;
+    void setSat(int newValue);
 
     String operator()(const String &key) const;
 

@@ -332,6 +332,11 @@ int YeelightStatus::sat() const
     return me().sat();
 }
 
+void YeelightStatus::setSat(int newValue)
+{
+    me().sat(newValue);
+}
+
 String YeelightStatus::operator()(const String &key) const
 {
     return me().keyValueMap_(key);

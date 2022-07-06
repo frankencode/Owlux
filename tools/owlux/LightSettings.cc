@@ -22,6 +22,7 @@
 #include <cc/CustomDialog>
 #include <cc/LineEdit>
 #include <cc/TimePicker>
+#include <cc/Checkbox>
 #include <cc/Thread>
 #include <cc/DEBUG>
 
@@ -145,7 +146,8 @@ struct LightSettings::State final: public View::State
                 .min(1700)
                 .max(6500)
                 .value(status.colorTemp())
-                .onValueChanged([this]{
+                .onUserInput([this]{
+                    colorMode_.value(false);
                     pushPoweredRequest(
                         YeelightSetColorTemp{
                             static_cast<int>(tempSlider_.value())
@@ -159,6 +161,30 @@ struct LightSettings::State final: public View::State
                 .visible(brightSlider_.visible() || tempSlider_.visible())
             )
             .add(
+                Checkbox{"Color Mode"}
+                .associate(&colorMode_)
+                .value(status.colorMode() == YeelightColorMode::HueSat)
+                .onValueChanged([this]{
+                    if (colorMode_.value()) {
+                        pushPoweredRequest(
+                            YeelightSetHueSat{
+                                static_cast<int>(hueSlider_.value()),
+                                100
+                            }
+                        );
+                        satSlider_.value(100);
+                    }
+                    else {
+                        pushPoweredRequest(
+                            YeelightSetColorTemp{
+                                static_cast<int>(tempSlider_.value())
+                            }
+                        );
+                    }
+                })
+                .visible(status.supportedMethods().find("set_hsv"))
+            )
+            .add(
                 Slider{}
                 .associate(&hueSlider_)
                 .leading(Icon::Palette)
@@ -166,15 +192,16 @@ struct LightSettings::State final: public View::State
                 .min(0)
                 .max(359)
                 .value(status.hue())
-                .onValueChanged([this]{
+                .onUserInput([this]{
                     pushPoweredRequest(
                         YeelightSetHueSat{
                             static_cast<int>(hueSlider_.value()),
                             static_cast<int>(satSlider_.value())
                         }
                     );
+                    colorMode_.value(true);
                 })
-                .visible(status.supportedMethods().find("set_hsv"))
+                .visible([this]{ return colorMode_.visible(); })
             )
             .add(
                 Slider{}
@@ -184,19 +211,20 @@ struct LightSettings::State final: public View::State
                 .min(0)
                 .max(100)
                 .value(status.sat())
-                .onValueChanged([this]{
+                .onUserInput([this]{
                     pushPoweredRequest(
                         YeelightSetHueSat{
                             static_cast<int>(hueSlider_.value()),
                             static_cast<int>(satSlider_.value())
                         }
                     );
+                    colorMode_.value(true);
                 })
-                .visible(hueSlider_.visible())
+                .visible([this]{ return colorMode_.visible(); })
             )
             .add(
                 Divider{}
-                .visible(hueSlider_.visible() || satSlider_.visible())
+                .visible(colorMode_.visible())
             )
             .add(
                 TonalButton{"Start sleep timer", Icon::Sleep}
@@ -333,6 +361,7 @@ struct LightSettings::State final: public View::State
     Switch powerSwitch_;
     Slider brightSlider_;
     Slider tempSlider_;
+    Checkbox colorMode_;
     Slider hueSlider_;
     Slider satSlider_;
     YeelightControl control_;
