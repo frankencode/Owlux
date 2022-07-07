@@ -7,7 +7,7 @@ namespace cc::owlux {
 class YeelightStartOffTimer final: public YeelightCommand
 {
 public:
-    explicit YeelightStartOffTimer(double offTime);
+    explicit YeelightStartOffTimer(int delayInMinutes);
 
 private:
     struct State;

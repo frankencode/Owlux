@@ -7,13 +7,9 @@ namespace cc::owlux {
 
 struct YeelightStartOffTimer::State final: public YeelightCommand::State
 {
-    explicit State(double offTime):
+    explicit State(int delayInMinutes):
         YeelightCommand::State{"cron_add"},
-        delay_{
-            static_cast<int>(
-                std::ceil((offTime - System::now()) / 60)
-            )
-        }
+        delay_{delayInMinutes}
     {}
 
     String toString() const
@@ -32,8 +28,8 @@ struct YeelightStartOffTimer::State final: public YeelightCommand::State
     int delay_;
 };
 
-YeelightStartOffTimer::YeelightStartOffTimer(double offTime):
-    YeelightCommand{new State{offTime}}
+YeelightStartOffTimer::YeelightStartOffTimer(int delayInMinutes):
+    YeelightCommand{new State{delayInMinutes}}
 {}
 
 } // namespace cc::owlux

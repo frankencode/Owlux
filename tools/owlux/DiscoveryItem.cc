@@ -1,5 +1,6 @@
 #include <owlux/DiscoveryItem>
 #include <cc/Text>
+#include <cc/TextButton>
 #include <cc/Picture>
 #include <cc/Timer>
 #include <cc/DEBUG>
@@ -52,6 +53,21 @@ struct DiscoveryItem::State final: public Control::State
             .topRight([this]{
                 return Point{width(), 0};
             })
+            .add(
+                TextButton{Icon::ClockEnd}
+                .text([this]{
+                    return
+                        Format{"%%:%%"}
+                        .arg(dec(status().offDate().hour(), 2))
+                        .arg(dec(status().offDate().minutes(), 2));
+                })
+                .centerRight([this]{
+                    return Point{0, settingsButton_.height() / 2};
+                })
+                .visible([this]{
+                    return status().hasOffTime();
+                })
+            )
         );
 
         if (initialStatus.refreshInterval() > 0) {

@@ -7,6 +7,8 @@
 #include <owlux/YeelightSetHueSat>
 #include <owlux/YeelightSave>
 #include <owlux/YeelightSetName>
+#include <owlux/YeelightStartOffTimer>
+#include <owlux/YeelightStopOffTimer>
 #include <cc/Application>
 #include <cc/ColumnLayout>
 #include <cc/StackView>
@@ -24,6 +26,8 @@
 #include <cc/TimePicker>
 #include <cc/Checkbox>
 #include <cc/Thread>
+#include <cc/Date>
+#include <cc/System>
 #include <cc/DEBUG>
 
 namespace cc::owlux {
@@ -77,7 +81,6 @@ struct LightSettings::State final: public View::State
                     .addAction(
                         Action{"Cancel"}
                         ([=]() mutable {
-                            CC_DEBUG << "Cancel";
                             dialog.close();
                         })
                     )
@@ -232,18 +235,31 @@ struct LightSettings::State final: public View::State
                 .onTriggered([this] {
                     TimePicker picker;
 
-                    TimePicker{}
+                    double offTime = System::now() + minutes(5);
+                    Date offDate = Date::local(offTime);
+
+                    TimePicker{offDate.hour(), offDate.minutes()}
                     .associate(&picker)
                     .onAccepted([=,this] {
-                        status_.setSleepTime(picker.hour(), picker.minute());
-                        status_.setSleepTimer(true);
+                        Date nowDate = Date::localNow();
+                        double offTime = nowDate.nextTime(picker.hour(), picker.minute());
+                        int delay = std::ceil((offTime - nowDate.time()) / 60);
+                        offTime = nowDate.time() + delay * 60.;
+                        status_.setOffTime(offTime);
+
+                        control_.requestChannel().pushBack(
+                            YeelightStopOffTimer{}
+                        );
+                        control_.requestChannel().pushBack(
+                            YeelightStartOffTimer{delay}
+                        );
                     })
                     .open();
                 })
                 .visible([this]{
                     return
                         status_.supportedMethods().find("cron_add") &&
-                        !status_.sleepTimer();
+                        !status_.hasOffTime();
                 })
             )
             .add(
@@ -251,26 +267,29 @@ struct LightSettings::State final: public View::State
                 .associate(&stopSleepTimer)
                 .autoExpand(false)
                 .onTriggered([this]{
-                    status_.setSleepTimer(false);
+                    status_.unsetOffTime();
+                    control_.requestChannel().pushBack(
+                        YeelightStopOffTimer{}
+                    );
                 })
                 .visible([this]{
                     return
                         status_.supportedMethods().find("cron_del") &&
-                        status_.sleepTimer();
+                        status_.hasOffTime();
                 })
                 .add(
                     TextButton{Icon::ClockEnd}
                     .text([this]{
                         return
                             Format{"%%:%%"}
-                            .arg(dec(status_.sleepHour(), 2))
-                            .arg(dec(status_.sleepMinutes(), 2));
+                            .arg(dec(status_.offDate().hour(), 2))
+                            .arg(dec(status_.offDate().minutes(), 2));
                     })
                     .centerLeft([=]{
                         return Point{ stopSleepTimer.width() + sp(12), stopSleepTimer.height() / 2 };
                     })
                     .visible([this]{
-                        return status_.sleepTimer();
+                        return status_.hasOffTime();
                     })
                 )
             )

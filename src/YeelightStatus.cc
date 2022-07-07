@@ -9,6 +9,7 @@
 #include <cc/input>
 #include <cc/str>
 #include <cc/DEBUG>
+#include <cmath>
 
 namespace cc::owlux {
 
@@ -241,6 +242,8 @@ public:
     Property<bool> sleepTimer;
     Property<int> sleepHour;
     Property<int> sleepMinutes;
+    Property<double> offTime { std::numeric_limits<double>::quiet_NaN() };
+    Property<Date> offDate { [this]{ return std::isnan(offTime()) ? Date{} : Date::local(offTime()); } };
 };
 
 YeelightStatus::YeelightStatus(const SocketAddress &address, const String &message):
@@ -342,30 +345,29 @@ String YeelightStatus::operator()(const String &key) const
     return me().keyValueMap_(key);
 }
 
-bool YeelightStatus::sleepTimer() const
+bool YeelightStatus::hasOffTime() const
 {
-    return me().sleepTimer();
+    return !std::isnan(me().offTime());
 }
 
-void YeelightStatus::setSleepTimer(bool on)
+double YeelightStatus::offTime() const
 {
-    me().sleepTimer(on);
+    return me().offTime();
 }
 
-int YeelightStatus::sleepHour() const
+Date YeelightStatus::offDate() const
 {
-    return me().sleepHour();
+    return me().offDate();
 }
 
-int YeelightStatus::sleepMinutes() const
+void YeelightStatus::setOffTime(double newValue)
 {
-    return me().sleepMinutes();
+    me().offTime(newValue);
 }
 
-void YeelightStatus::setSleepTime(int hour, int minutes)
+void YeelightStatus::unsetOffTime()
 {
-    me().sleepHour(hour);
-    me().sleepMinutes(minutes);
+    me().offTime(std::numeric_limits<double>::quiet_NaN());
 }
 
 String YeelightStatus::toString() const

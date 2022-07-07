@@ -9,6 +9,7 @@
 #include <cc/AppBar>
 #include <cc/ListMenu>
 #include <cc/FloatingButton>
+#include <cc/Timer>
 #include <cc/DEBUG>
 
 namespace cc::owlux {
@@ -38,6 +39,19 @@ struct DiscoveryView::State final: public View::State
             }
         }};
 
+        offTimeUpdate_.onTimeout([this]{
+            double now = System::now();
+            for (const auto &pair: itemByAddress_) {
+                YeelightStatus status = pair.value().status();
+                if (status.hasOffTime()) {
+                    if (status.offTime() <= now) {
+                        status.unsetOffTime();
+                        status.setPower(false);
+                    }
+                }
+            }
+        });
+
         add(
             AppBar{}
             .associate(&appBar_)
@@ -62,6 +76,7 @@ struct DiscoveryView::State final: public View::State
 
         scanningThread_.start();
         discoveryThread_.start();
+        offTimeUpdate_.start();
     }
 
     ~State()
@@ -132,6 +147,8 @@ struct DiscoveryView::State final: public View::State
     Semaphore<int> scannerShutdown_;
     Semaphore<int> scanningRequest_;
     Thread scanningThread_;
+
+    Timer offTimeUpdate_ { 3 };
 
     Map<SocketAddress, DiscoveryItem> itemByAddress_;
 

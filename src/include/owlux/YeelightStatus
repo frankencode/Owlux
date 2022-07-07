@@ -5,6 +5,7 @@
 #include <cc/Version>
 #include <cc/Color>
 #include <cc/Set>
+#include <cc/Date>
 
 namespace cc::owlux {
 
@@ -46,12 +47,11 @@ public:
 
     String operator()(const String &key) const;
 
-    bool sleepTimer() const;
-    void setSleepTimer(bool on);
-
-    int sleepHour() const;
-    int sleepMinutes() const;
-    void setSleepTime(int hour, int minutes);
+    bool hasOffTime() const;
+    double offTime() const;
+    Date offDate() const;
+    void setOffTime(double newValue);
+    void unsetOffTime();
 
     String toString() const;
 
