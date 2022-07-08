@@ -40,7 +40,7 @@ Other dependencies will be installed automatically by the installation script.
 Open the terminal and issue the following command to build and install Owlux:
 
 ```
-wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_pi_11.sh && bash ./install_pi_11.sh
+wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_pi_11.sh && time bash ./install_pi_11.sh
 ```
 
 The build process takes about 20min on a Raspberry Pi 400. When the build has finished you will find a link on your desktop to start the application.
