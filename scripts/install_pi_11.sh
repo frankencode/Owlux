@@ -11,6 +11,8 @@ set -ex
 #
 # Download source and bootsrap the build system
 #
+rm -rf /tmp/src/Owlux
+rm -rf /tmp/build/Owlux_release
 mkdir -p /tmp/src
 pushd /tmp/src
 git clone --recurse-submodules https://github.com/frankencode/Owlux.git
