@@ -16,7 +16,7 @@ Supported features:
  * Renaming of lights
  * ... more to come !-)
 
-*For firmware updates and commissioning of lights to your WiFi hotspot you still need to use the official Yeelight app.*
+*(For firmware updates and commissioning of lights to your WiFi hotspot you still need to use the official Yeelight app.)*
 
 Screenshots
 -----------
