@@ -27,7 +27,7 @@ wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_
 ./install_pi_11.sh
 ```
 
-The build process takes about 20min on a Pi 400.
+The build process takes about 20min on a Raspberry Pi 400.
 
 **Please make sure that you have proper cooling if you are using a different Raspberry Pi!**
 
