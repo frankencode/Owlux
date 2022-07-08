@@ -50,5 +50,5 @@ The build process takes about 25min on a Raspberry Pi 400. When the build has fi
 Disclaimer
 ----------
 
-Yeelight is a trademark Qingdao Yeelink Information Technology Co., Ltd.
+Yeelight is a trademark of Qingdao Yeelink Information Technology Co., Ltd.
 The authors of Owlux are not affiliated with Yeelink.
