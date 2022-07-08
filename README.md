@@ -35,14 +35,15 @@ Building on your Raspberry Pi
 
 In the scripts/ subfolder you will find a script to build and install Owlux
 from sources. Owlux requires at least Raspberry Pi OS 11 (Debian Bullseye).
-Other dependencies will be installed automatically by the installation scripts:
+Other dependencies will be installed automatically by the installation script.
+Open the terminal and issue the following commands to start the build process:
 
 ```
 wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_pi_11.sh
-./install_pi_11.sh
+bash ./install_pi_11.sh
 ```
 
-The build process takes about 20min on a Raspberry Pi 400. You will find a link on your desktop to start the application.
+The build process takes about 20min on a Raspberry Pi 400. When the build has finished you will find a link on your desktop to start the application.
 
 **Please make sure that you have proper cooling if you are using a different Raspberry Pi!**
 
