@@ -33,3 +33,20 @@ $CCBUILD -configure -release /tmp/src/Owlux/
 time $CCBUILD -release /tmp/src/Owlux
 
 sudo $CCBUILD -install -release /tmp/src/Owlux
+
+#
+# Create desktop link
+#
+
+cat ~/Desktop/owlux.desktop << EOI
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Owlux
+Comment=Yeelight controller
+Exec=/usr/local/bin/owlux
+Icon=/usr/local/share/owlux/app.svg
+Path=
+Terminal=false
+StartupNotify=false
+EOI
