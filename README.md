@@ -12,8 +12,8 @@ commissioning lights to your WiFi hotspot you still need to use the official Yee
 Screenshots
 -----------
 
-![Owlux on Bullseye 1]screenshots/2022-07-08-220154_360x687_scrot.png
-![Owlux on Bullseye 2]screenshots/2022-07-08-220201_360x687_scrot.png
+![Owlux on Bullseye 1](screenshots/2022-07-08-220154_360x687_scrot.png)
+![Owlux on Bullseye 2](screenshots/2022-07-08-220201_360x687_scrot.png)
 
 Building on your Raspberry Pi
 -----------------------------
