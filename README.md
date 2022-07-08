@@ -1,5 +1,5 @@
-Owlux: Yeelight control app for Raspberry Pi
-============================================
+Owlux: Yeelight control app for Raspberry Pi 3/4
+================================================
 
 About
 -----
