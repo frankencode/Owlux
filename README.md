@@ -8,13 +8,12 @@ Owlux is a smart light control app. It allows to control the WiFi based Yeelight
 bulbs and ceiling lights.
 
 Supported features:
- * Automatic detection of all lights on your network
- * Keeping track of lights by processing hourly announcements (refresh messages)
- * Switch on/off individual lights
- * Change of temperature, brightness (and color)
- * Sleep timers (works even after closing Owlux)
- * Renaming of lights
- * ... more to come !-)
+ * automatic detection of all lights on your network
+ * keeping track of lights by processing hourly announcements (refresh messages)
+ * switch on/off individual lights
+ * change of temperature, brightness (and color)
+ * sleep timers (works even after closing Owlux)
+ * renaming of lights
 
 *(For firmware updates and commissioning of lights to your WiFi hotspot you still need to use the official Yeelight app.)*
 
