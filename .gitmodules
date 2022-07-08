@@ -1,0 +1,4 @@
+[submodule "CoreComponents"]
+	path = CoreComponents
+	url = https://github.com/frankencode/CoreComponents.git
+	branch = v2.1
