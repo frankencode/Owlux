@@ -1,5 +1,5 @@
-Owlux: Yeelight control app for Raspberry Pi 3/4
-================================================
+Owlux: Yeelight smart LED control app for Raspberry Pi 3/4
+==========================================================
 
 About
 -----
@@ -14,6 +14,11 @@ Supported features:
  * change of temperature, brightness (and color)
  * sleep timers (works even after closing Owlux)
  * renaming of lights
+
+Devices known to work:
+ * Yeelight 1S (aka color4)
+ * Yeelight 9W (aka color)
+ * Yeelight Galaxy Ceiling Light 450
 
 *(For firmware updates and commissioning of lights to your WiFi hotspot you still need to use the official Yeelight app.)*
 
