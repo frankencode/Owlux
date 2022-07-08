@@ -19,7 +19,8 @@ Building on your Raspberry Pi
 -----------------------------
 
 In the scripts/ subfolder you will find a script to build and install Owlux
-from sources. It will also install needed dependencies.
+from sources. Owlux requires at least Raspberry Pi OS 11 (Debian Bullseye).
+Other dependencies will be installed automatically by the installation scripts:
 
 ```
 wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_pi_11.sh
