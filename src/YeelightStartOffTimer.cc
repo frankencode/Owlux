@@ -1,4 +1,4 @@
-#/*
+/*
  * Copyright (C) 2022 Frank Mertens.
  *
  * Distribution and use is allowed under the terms of the GNU General Public License version 3
@@ -6,7 +6,7 @@
  *
  */
 
-include <owlux/YeelightStartOffTimer>
+#include <owlux/YeelightStartOffTimer>
 #include <owlux/YeelightPower>
 #include <cc/System>
 #include <cc/Format>
