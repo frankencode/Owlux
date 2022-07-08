@@ -39,7 +39,7 @@ Other dependencies will be installed automatically by the installation script.
 
 Open the terminal and issue the following command to build and install Owlux:
 
-```
+```sh
 wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_pi_11.sh && time bash ./install_pi_11.sh
 ```
 
