@@ -26,11 +26,12 @@ wget https://raw.githubusercontent.com/frankencode/Owlux/master/scripts/install_
 ./install_pi_11.sh
 ```
 
-The build process takes about 20min on a Pi 400. Please make sure that you have proper cooling if you are using a different Raspberry Pi!
+The build process takes about 20min on a Pi 400. *Please make sure that you have proper cooling if you are using a different Raspberry Pi!*
 
 Disclaimer
 ----------
 
 Yeelight is a trademark Qingdao Yeelink Information Technology Co., Ltd.
 The authors of Owlux are not affiliated with Yeelink.
-Use Owlux on YOUR OWN RISK!
+
+*Use Owlux on YOUR OWN RISK!*
