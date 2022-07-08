@@ -30,7 +30,7 @@ Running on Raspberry Pi OS 11:
 ![Owlux on Bullseye 1](screenshots/2022-07-08-220154_360x687_scrot.png)
 ![Owlux on Bullseye 2](screenshots/2022-07-08-220201_360x687_scrot.png)
 
-Building on your Raspberry Pi
+Build and install from source
 -----------------------------
 
 In the scripts/ subfolder you will find a script to build and install Owlux
