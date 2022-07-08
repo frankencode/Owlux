@@ -14,7 +14,7 @@ Supported features:
  * Change of temperature, brightness (and color)
  * Sleep timers (works even after closing Owlux)
  * Renaming of lights
- * ... more to come!-)
+ * ... more to come !-)
 
 (For firmware updates and commissioning lights to your WiFi hotspot you still need to use the official Yeelight app.)
 
