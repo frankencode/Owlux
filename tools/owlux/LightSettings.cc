@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2022 Frank Mertens.
+ *
+ * Distribution and use is allowed under the terms of the GNU General Public License version 3
+ * (see Owlux/LICENSE-gpl-3.0).
+ *
+ */
+
 #include <owlux/LightSettings>
 #include <owlux/DeviceInspector>
 #include <owlux/YeelightControl>
@@ -103,7 +111,7 @@ struct LightSettings::State final: public View::State
 
         const bool needSaveButton =
             status.supportedMethods().find("set_default") &&
-            status.model() == "color";
+            status.model() != "color4";
 
         TonalButton stopSleepTimer;
 
