@@ -29,6 +29,7 @@ Running on Raspberry Pi OS 11:
 
 ![Owlux on Bullseye 1](screenshots/2022-07-08-220154_360x687_scrot.png)
 ![Owlux on Bullseye 2](screenshots/2022-07-08-220201_360x687_scrot.png)
+![Owlux on Bullseye 3](screenshots/2022-07-09-080315_360x687_scrot.png)
 
 Build and install from source
 -----------------------------
