@@ -1,8 +1,10 @@
 Tests {
+    depends: [
+        libCoreComponentsCore,
+        libCoreComponentsCrypto,
+        libCoreComponentsTesting
+    ]
     use: [
-        CoreComponents/Core,
-        CoreComponents/Crypto,
-        CoreComponents/Testing,
         Owlux
     ]
 }

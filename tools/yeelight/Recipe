@@ -1,9 +1,11 @@
 Application {
+    depends: [
+        libCoreComponentsCore,
+        libCoreComponentsNetwork,
+        libCoreComponentsGlob,
+        readline
+    ]
     use: [
-        CoreComponents/Core,
-        CoreComponents/Network,
-        CoreComponents/Glob,
         Owlux
     ]
-    depends: readline
 }
