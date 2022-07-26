@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Owlux
+Comment=Yeelight controller
+Exec=/usr/bin/owlux
+Icon=/usr/share/owlux/icons/app.svg
+Categories=Utility;
+Path=
+Terminal=false
+StartupNotify=true
