@@ -7,6 +7,7 @@
  */
 
 #include <owlux/YeelightDiscovery>
+#include <cc/NetworkInterface>
 #include <cc/DatagramSocket>
 #include <cc/Semaphore>
 #include <cc/System>
@@ -18,7 +19,7 @@ namespace cc::owlux {
 struct YeelightDiscovery::State: public Object::State
 {
     State(long refreshInterval, int maxRetry):
-        clientSocket_{SocketAddress{ProtocolFamily::Inet4, "*"}},
+        clientSocket_{guessClientSocketAddress()},
         refreshInterval_{refreshInterval},
         retryCount_{maxRetry}
     {
@@ -38,6 +39,23 @@ struct YeelightDiscovery::State: public Object::State
     ~State()
     {
         wait();
+    }
+
+    static SocketAddress guessClientSocketAddress()
+    {
+        SocketAddress address;
+        List<NetworkInterface> interfaceList = NetworkInterface::queryAll(ProtocolFamily::Inet4);
+        for (const NetworkInterface &interface: interfaceList) {
+            if (interface.name().startsWith("wl")) {
+                List<NetworkLabel> labels = interface.labels();
+                if (labels.count() > 0) {
+                    address = labels.at(0).localAddress();
+                    break;
+                }
+            }
+        }
+        if (!address) address = SocketAddress{ProtocolFamily::Inet4, "*"};
+        return address;
     }
 
     void refresh()
