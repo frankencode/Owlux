@@ -373,9 +373,10 @@ int main(int argc, char *argv[])
         }
         else if (options("sleep").to<long>() >= 0) {
             CC_INSPECT(options("sleep").to<long>());
+            int delayInMinutes = options("sleep").to<long>();
             double nowTime = System::now();
-            double offTime = nowTime + 60 * options("sleep").to<long>();
-            YeelightStartOffTimer command { offTime };
+            double offTime = nowTime + 60 * delayInMinutes;
+            YeelightStartOffTimer command { delayInMinutes };
             fout() << "Going to sleep at " << Date{offTime}.toString() << nl;
             YEELIGHT_EXPECT(targets.count() >= 1);
             for (const SocketAddress &target: targets) {

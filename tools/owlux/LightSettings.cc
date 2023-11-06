@@ -34,7 +34,7 @@
 #include <cc/TimePicker>
 #include <cc/Checkbox>
 #include <cc/Thread>
-#include <cc/Date>
+#include <cc/Timezone>
 #include <cc/System>
 #include <cc/DEBUG>
 
@@ -244,13 +244,13 @@ struct LightSettings::State final: public View::State
                     TimePicker picker;
 
                     double offTime = System::now() + minutes(5);
-                    Date offDate = Date::local(offTime);
+                    Date offDate = Timezone::date(offTime);
 
                     TimePicker{offDate.hour(), offDate.minutes()}
                     .associate(&picker)
                     .onAccepted([=,this] {
-                        Date nowDate = Date::localNow();
-                        double offTime = nowDate.nextTime(picker.hour(), picker.minute());
+                        Date nowDate = Timezone::currentDate();
+                        double offTime = Timezone::nextTime(nowDate, picker.hour(), picker.minute());
                         int delay = std::ceil((offTime - nowDate.time()) / 60);
                         offTime = nowDate.time() + delay * 60.;
                         status_.setOffTime(offTime);

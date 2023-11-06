@@ -1,11 +1,12 @@
 Library {
     name: Owlux
-    depends: [
-        libCoreComponentsCore,
-        libCoreComponentsGlob,
-        libCoreComponentsNetwork,
-        libCoreComponentsMeta,
-        libCoreComponentsCrypto
+    use: [
+        CoreComponents/Core,
+        CoreComponents/System,
+        CoreComponents/Glob,
+        CoreComponents/Network,
+        CoreComponents/Meta,
+        CoreComponents/Crypto
     ]
     source: [ *.cc, setup/*.cc ]
 }

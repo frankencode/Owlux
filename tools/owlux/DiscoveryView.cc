@@ -162,7 +162,7 @@ struct DiscoveryView::State final: public View::State
 
     AppBar appBar_;
     ListMenu listMenu_;
-    Fun<void(const YeelightStatus &status)> onSelected_;
+    Function<void(const YeelightStatus &status)> onSelected_;
 };
 
 DiscoveryView::DiscoveryView():
@@ -174,7 +174,7 @@ DiscoveryView &DiscoveryView::associate(Out<DiscoveryView> self)
     return View::associate<DiscoveryView>(self);
 }
 
-DiscoveryView &DiscoveryView::onSelected(Fun<void(const YeelightStatus &status)> &&f)
+DiscoveryView &DiscoveryView::onSelected(Function<void(const YeelightStatus &status)> &&f)
 {
     me().onSelected_ = move(f);
     return *this;

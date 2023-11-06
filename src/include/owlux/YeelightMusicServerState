@@ -53,7 +53,7 @@ private:
 
     Thread thread_;
     Semaphore<int> shutdown_;
-    Fun<void(const SocketAddress &)> started_;
+    Function<void(const SocketAddress &)> started_;
     SocketAddress address_ { ProtocolFamily::Inet4, "*" };
     ServerSocket socket_;
     Map<SocketAddress, YeelightMusicServerConnection> connections_;

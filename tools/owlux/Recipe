@@ -1,11 +1,10 @@
 Application {
-    depends: [
-        libCoreComponentsCore,
-        libCoreComponentsNetwork,
-        libCoreComponentsGlob,
-        libCoreComponentsUx
-    ]
     use: [
+        CoreComponents/Core,
+        CoreComponents/System,
+        CoreComponents/Network,
+        CoreComponents/Glob,
+        CoreComponents/UX,
         Owlux
     ]
     bundle: icons

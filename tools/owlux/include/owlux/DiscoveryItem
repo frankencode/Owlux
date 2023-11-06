@@ -38,11 +38,11 @@ public:
       */
     DiscoveryItem &status(const YeelightStatus &status);
 
-    DiscoveryItem &onSettingsRequested(Fun<void()> &&f);
+    DiscoveryItem &onSettingsRequested(Function<void()> &&f);
 
     /** Setup function \a f to be called if this item has been expired
       */
-    DiscoveryItem &onExpired(Fun<void()> &&f);
+    DiscoveryItem &onExpired(Function<void()> &&f);
 
     /** Update status and restart expiry timer
       */

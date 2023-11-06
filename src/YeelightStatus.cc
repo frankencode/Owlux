@@ -14,6 +14,7 @@
 #include <cc/Map>
 #include <cc/Uri>
 #include <cc/Property>
+#include <cc/Timezone>
 #include <cc/input>
 #include <cc/str>
 #include <cc/DEBUG>
@@ -251,7 +252,7 @@ public:
     Property<int> sleepHour;
     Property<int> sleepMinutes;
     Property<double> offTime { std::numeric_limits<double>::quiet_NaN() };
-    Property<Date> offDate { [this]{ return std::isnan(offTime()) ? Date{} : Date::local(offTime()); } };
+    Property<Date> offDate { [this]{ return std::isnan(offTime()) ? Date{} : Timezone::date(offTime()); } };
 };
 
 YeelightStatus::YeelightStatus(const SocketAddress &address, const String &message):

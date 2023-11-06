@@ -35,7 +35,7 @@ public:
 
     /** Setup function to call when a devce is selected by the user
       */
-    DiscoveryView &onSelected(Fun<void(const YeelightStatus &status)> &&f);
+    DiscoveryView &onSelected(Function<void(const YeelightStatus &status)> &&f);
 
 private:
     struct State;

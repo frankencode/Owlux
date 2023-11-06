@@ -118,13 +118,13 @@ DiscoveryItem &DiscoveryItem::status(const YeelightStatus &status)
     return *this;
 }
 
-DiscoveryItem &DiscoveryItem::onSettingsRequested(Fun<void()> &&f)
+DiscoveryItem &DiscoveryItem::onSettingsRequested(Function<void()> &&f)
 {
     me().settingsButton_.onClicked([f]{ f(); });
     return *this;
 }
 
-DiscoveryItem &DiscoveryItem::onExpired(Fun<void()> &&f)
+DiscoveryItem &DiscoveryItem::onExpired(Function<void()> &&f)
 {
     if (me().expiryTimer_) me().expiryTimer_.onTimeout(move(f));
     return *this;
