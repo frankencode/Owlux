@@ -6,7 +6,7 @@ pkgname=(
     'owlux_tools'
 )
 pkgver=1.0.0
-pkgrel=1
+pkgrel=4
 pkgdesc="Yeelight smart LED control app"
 url="https://github.com/frankencode/Owlux"
 arch=('x86_64')
@@ -15,10 +15,10 @@ source=(
     "$pkgbase-$pkgver.zip::https://github.com/frankencode/Owlux/archive/refs/tags/v${pkgver}.zip"
 )
 md5sums=(
-    'ff42b9a808f1992769a2d9447685c3a7'
+    '846cff8a970df3a68c0d7e877cb51aa0'
 )
 sha1sums=(
-    'd56ef8ea3d9433df001aecbdd60872d62c98045b'
+    'c4da17f01aa5dde62bce2d6cb54abaeec75a6b55'
 )
 
 makedepends=(
@@ -32,11 +32,15 @@ makedepends=(
 )
 
 build() {
-    rm -rf Owlux
-    ln -s Owlux-$pkgver Owlux
-    mkdir -p $pkgbase-$pkgver-build
-    cd $pkgbase-$pkgver-build
-    ccbuild -prefix=/usr -release -test ../Owlux
+    ln -sf Owlux-$pkgver Owlux
+    mkdir -p Owlux-$pkgver-build
+    cd Owlux-$pkgver-build
+    ccbuild -prefix=/usr -release ../Owlux
+}
+
+check() {
+    cd Owlux-$pkgver-build
+    ccbuild -prefix=/usr -release -test-run ../Owlux
 }
 
 package_owlux() {
@@ -55,7 +59,7 @@ package_owlux() {
 package_owlux_tools() {
     pkgdesc="$pkgdesc: gui app and tools"
     depends=('owlux' 'corecomponents_ux')
-    install Owlux/tools/owlux/owlux.desktop /usr/share/applications/owlux.desktop
+    install -Dm644 Owlux/tools/owlux/owlux.desktop -t "$pkgdir/usr/share/applications"
     cd Owlux-$pkgver-build
     ccbuild -prefix=/usr -root="$pkgdir" -install -release ../Owlux/tools
 }

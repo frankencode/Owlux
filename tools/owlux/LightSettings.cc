@@ -154,8 +154,8 @@ struct LightSettings::State final: public View::State
                 .associate(&tempSlider_)
                 .leading(Icon::Thermometer)
                 .trailing(NumberCell{})
-                .min(1700)
-                .max(6500)
+                .min(1700) // \todo ceiling3 starts at 2700
+                .max(6500) // \todo ceiling3 ends at 5700
                 .value(status.colorTemp())
                 .onUserInput([this]{
                     colorMode_.value(false);
