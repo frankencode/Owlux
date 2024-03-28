@@ -4,7 +4,6 @@ Library {
         CoreComponents/Core,
         CoreComponents/System,
         CoreComponents/Glob,
-        CoreComponents/Network,
         CoreComponents/Meta,
         CoreComponents/Crypto
     ]

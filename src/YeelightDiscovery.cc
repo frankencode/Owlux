@@ -44,7 +44,7 @@ struct YeelightDiscovery::State: public Object::State
     static SocketAddress guessClientSocketAddress()
     {
         SocketAddress address;
-        List<NetworkInterface> interfaceList = NetworkInterface::queryAll(ProtocolFamily::Inet4);
+        List<NetworkInterface> interfaceList = NetworkInterface::queryAll(ProtocolFamily::InternetV4);
         for (const NetworkInterface &interface: interfaceList) {
             if (interface.name().startsWith("wl")) {
                 List<NetworkLabel> labels = interface.labels();
@@ -54,7 +54,7 @@ struct YeelightDiscovery::State: public Object::State
                 }
             }
         }
-        if (!address) address = SocketAddress{ProtocolFamily::Inet4, "*"};
+        if (!address) address = SocketAddress{ProtocolFamily::InternetV4, "*"};
         return address;
     }
 
@@ -136,11 +136,11 @@ struct YeelightDiscovery::State: public Object::State
     }
 
     SocketAddress groupAddress_ {
-        ProtocolFamily::Inet4, "239.255.255.250"
+        ProtocolFamily::InternetV4, "239.255.255.250"
     };
 
     SocketAddress discoveryAddress_{
-        ProtocolFamily::Inet4, "239.255.255.250", 1982
+        ProtocolFamily::InternetV4, "239.255.255.250", 1982
     };
 
     Channel<YeelightStatus> result_;

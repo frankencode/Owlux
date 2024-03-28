@@ -54,7 +54,7 @@ private:
     Thread thread_;
     Semaphore<int> shutdown_;
     Function<void(const SocketAddress &)> started_;
-    SocketAddress address_ { ProtocolFamily::Inet4, "*" };
+    SocketAddress address_ { ProtocolFamily::InternetV4, "*" };
     ServerSocket socket_;
     Map<SocketAddress, YeelightMusicServerConnection> connections_;
     Channel<YeelightMusicServerConnection> terminated_;

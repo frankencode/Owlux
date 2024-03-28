@@ -2,7 +2,7 @@ Application {
     depends: [ readline ]
     use: [
         CoreComponents/Core,
-        CoreComponents/Network,
+        CoreComponents/System,
         CoreComponents/Glob,
         Owlux
     ]

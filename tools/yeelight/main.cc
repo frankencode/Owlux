@@ -25,6 +25,7 @@
 #include <owlux/setup/YeelightSecretStatus>
 #include <owlux/setup/YeelightSecretSetup>
 #include <owlux/setup/YeelightSecretResult>
+
 #include <cc/NetworkInterface>
 #include <cc/NetworkState>
 #include <cc/DatagramSocket>
@@ -35,8 +36,9 @@
 #include <cc/HexDump>
 #include <cc/Date>
 #include <cc/stdio>
-#include <tuple>
 #include <cc/DEBUG>
+
+#include <tuple>
 #include <readline/readline.h>
 #include <unistd.h>
 #include <termios.h>
@@ -133,7 +135,7 @@ int main(int argc, char *argv[])
                 }
             }
             else {
-                targets.append(SocketAddress{Uri{item}, port});
+                targets.append(SocketAddress{item, port});
             }
         }
 
@@ -154,10 +156,10 @@ int main(int argc, char *argv[])
 
             if (targets.count() == 1) {
                 peerAddress = targets[0];
-                localAddress = SocketAddress{ProtocolFamily::Inet4};
+                localAddress = SocketAddress{ProtocolFamily::InternetV4};
             }
             else {
-                List<NetworkInterface> interfaces = NetworkInterface::queryAll(ProtocolFamily::Inet4);
+                List<NetworkInterface> interfaces = NetworkInterface::queryAll(ProtocolFamily::InternetV4);
                 NetworkInterface wifi;
                 for (const NetworkInterface &candidate: interfaces) {
                     if (candidate.name().startsWith("wlp") || candidate.name().startsWith("wlan")) {

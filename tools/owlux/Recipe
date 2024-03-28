@@ -2,7 +2,6 @@ Application {
     use: [
         CoreComponents/Core,
         CoreComponents/System,
-        CoreComponents/Network,
         CoreComponents/Glob,
         CoreComponents/UX,
         Owlux
